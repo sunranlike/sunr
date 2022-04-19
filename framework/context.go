@@ -7,11 +7,18 @@
 package framework
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
+	"errors"
+	"io/ioutil"
 	"net/http"
+	"strconv"
+	"sync"
+	"time"
 )
 
-// 自定义 Context
+// 自定义的 Context,使用request的ctx作为基本的ctx
 type Context struct {
 	//请求和返回
 	request        *http.Request //这里为什么用指针
@@ -67,14 +74,19 @@ func (ctx *Context) HasTimeout() bool {
 	return ctx.hasTimeout
 }
 
-//BaseContext()返回的就是标准库的ctx
+// #endregio
+
+//BaseContext()调用的其实是requestr里面的Context()函数,这个函数返回的还是基本ctx
+//不过由于返回的是request里面的ctx,所有我们的baseCtx就是有一些request的方法
 func (ctx *Context) BaseContext() context.Context {
 	//直接使用request的Ctx,导入这个标准包,我就不用再去写新的实现了
 	return ctx.request.Context()
 }
 
+//这个Done函数其实request没有实现,那么编译器就会去上一层去找Done,这叫做代理delegate
 func (ctx *Context) Done() <-chan struct{} {
-	//同样Done函数也用BaseContext()的Done(),就不用我们去实现了
+	//同样Done函数也用BaseContext()的Done()(其实是request的Done(),但是request没有这个方法,
+	//就又会去标准库ctx找Done函数),就不用我们去实现了
 	return ctx.BaseContext().Done()
 }
 
