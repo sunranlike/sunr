@@ -19,6 +19,7 @@ import (
 )
 
 // 自定义的 Context,使用request的ctx作为基本的ctx
+//为什么要写自己的？我们实际上实在官方的基础上添加了一些：request和response，handler等等
 type Context struct {
 	//请求和返回
 	request        *http.Request //这里为什么用指针
@@ -224,7 +225,7 @@ func (ctx *Context) BindJson(obj interface{}) error {
 // #endregion
 
 // #region response
-
+//status是返回的http状态码, obj是写入的字符串？也不一定是字符串
 func (ctx *Context) Json(status int, obj interface{}) error {
 	if ctx.HasTimeout() {
 		return nil
