@@ -15,7 +15,6 @@ func FooControllerHandler(c *framework.Context) error {
 	//return ctx.Json(200, map[string]interface{}{
 	//	"code": 0,
 	//})
-
 	durationCtx, cancel := context.WithTimeout(c.BaseContext(), time.Duration(1*time.Second)) //1s的ctx,基于ctx
 	// 这里记得当所有事情处理结束后调用 cancel，告知 durationCtx 的后续 Context 结束
 	defer cancel()

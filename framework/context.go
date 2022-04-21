@@ -27,8 +27,8 @@ type Context struct {
 	//自定义的ctx包含标准库的ctx
 	ctx context.Context
 	//自定的handler函数
-	handler ControllerHandler
-
+	handlers []ControllerHandler //这里变成一个数组了
+	index    int                 // 当前请求调用到调用链的哪个节点
 	// 是否超时标记位
 	hasTimeout bool
 	// 写保护机制sync.Mutex是一个结构体,其他的要么是接口要么是方法
@@ -45,8 +45,19 @@ func NewContext(r *http.Request, w http.ResponseWriter) *Context { //构造函�
 		ctx:            r.Context(),
 		writerMux:      &sync.Mutex{}, //这里必须要加{},why?很简单,这里需要的是一个地址,一个实际的地址,而不加{}
 		//的话并只是一个实际数据结构 sync.Mutex ,而仅仅只是一个
-
+		index: -1,
 	}
+}
+
+// 核心函数，调用context的下一个函数
+func (ctx *Context) Next() error {
+	ctx.index++
+	if ctx.index < len(ctx.handlers) {
+		if err := ctx.handlers[ctx.index](ctx); err != nil { //这里就已经执行下一个函数了
+			return err
+		}
+	}
+	return nil
 }
 
 // #region base function,这些基本函数其实就是来自于别的包,我只是封装了下
@@ -251,3 +262,8 @@ func (ctx *Context) Text(status int, obj string) error {
 }
 
 // #endregion
+
+// 为context设置handlers
+func (ctx *Context) SetHandlers(handlers []ControllerHandler) {
+	ctx.handlers = handlers
+}
