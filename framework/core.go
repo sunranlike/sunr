@@ -96,7 +96,7 @@ func (c *Core) Group(prefix string) IGroup {
 }
 
 // 通过request来匹配路由找到对应的方法，如果没有匹配到，返回nil
-func (c *Core) FindRouteByRequest(request *http.Request) []ControllerHandler {
+func (c *Core) FindRouteNodeByRequest(request *http.Request) *node {
 	// uri 和 method 全部转换为大写，保证大小写不敏感
 	uri := request.URL.Path
 	method := request.Method
@@ -112,7 +112,7 @@ func (c *Core) FindRouteByRequest(request *http.Request) []ControllerHandler {
 	//	}
 	//}
 	if methodHandlers, ok := c.router[upperMethod]; ok {
-		return methodHandlers.FindHandler(uri) //估计已经实现了大小写匹配了
+		return methodHandlers.root.matchNode(uri)
 	}
 	return nil
 }
@@ -125,22 +125,31 @@ func (c *Core) ServeHTTP(response http.ResponseWriter, request *http.Request) {
 	log.Println(request.URL, request.Method, request.Body)
 	ctx := NewContext(request, response) //这个已经不是简单地ctx了而是一个功能丰富的机构提
 	//只是名字还和ctx一样
-
+	// 寻找路由
+	node := c.FindRouteNodeByRequest(request) //升级为双向的
+	if node == nil {
+		// 如果没有找到，这里打印日志
+		ctx.SetStatus(404).Json("not found")
+		//ctx.SetStatus(404).Json("not found")
+		return
+	}
 	// 一个简单的路由选择器，这里直接写死为测试路由foo
 	//rotuer 是什么?是core的一个map,map映射的是一个函数,所以这里router最后是个函数
 	//寻找路由
-	handlers := c.FindRouteByRequest(request)
-	if handlers == nil {
-		ctx.Json(404, "not found")
-		return
-	}
+	//handlers := c.FindRouteByRequest(request)
+	//if handlers == nil {
+	//
+	//	return
+	//}
 
 	log.Println("core.router")
 	// 设置context中的handlers字段
-	ctx.SetHandlers(handlers)
+	ctx.SetHandlers(node.handlers)
+	params := node.parseParamsFromEndNode(request.URL.Path)
+	ctx.SetParams(params)
 	// 调用路由函数，如果返回err 代表存在内部错误，返回500状态码
 	if err := ctx.Next(); err != nil {
-		ctx.Json(500, "inner error")
+		ctx.Json("inner error").SetStatus(500)
 		return
 	}
 	//if err := router(ctx); err != nil {

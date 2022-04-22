@@ -3,31 +3,31 @@ package main
 import "coredemo/framework"
 
 func SubjectAddController(c *framework.Context) error {
-	c.Json(200, "ok, SubjectAddController")
+	c.Json("ok, SubjectAddController").SetStatus(200)
 	return nil
 }
 
 func SubjectListController(c *framework.Context) error {
-	c.Json(200, "ok, SubjectListController")
+	c.Json("ok, SubjectListController").SetStatus(200)
 	return nil
 }
 
 func SubjectDelController(c *framework.Context) error {
-	c.Json(200, "ok, SubjectDelController")
+	c.Json("ok, SubjectDelController").SetStatus(200)
 	return nil
 }
 
 func SubjectUpdateController(c *framework.Context) error {
-	c.Json(200, "ok, SubjectUpdateController")
+	c.Json("ok, SubjectUpdateController").SetStatus(200)
 	return nil
 }
 
 func SubjectGetController(c *framework.Context) error {
-	c.Json(200, "ok, SubjectGetController")
+	c.Json("ok, SubjectGetController").SetStatus(200)
 	return nil
 }
 
 func SubjectNameController(c *framework.Context) error {
-	c.Json(200, "ok, SubjectNameController")
+	c.Json("ok, SubjectNameController").SetStatus(200)
 	return nil
 }

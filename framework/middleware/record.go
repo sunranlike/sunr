@@ -16,7 +16,8 @@ func RecordRequsstTime() framework.ControllerHandler {
 		// 执行其他中间件和函数处理
 		c.Next()
 		// 获取处理时长
-		time.Sleep(3 * time.Second)
+		time.Sleep(1 * time.Second)
+		c.Json("休息1s哈哈哈")
 		tc := time.Since(startT)
 		log.Println(tc)
 		return nil

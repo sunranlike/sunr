@@ -11,6 +11,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"strconv"
@@ -42,8 +43,8 @@ type Context struct {
 	// 是否超时标记位
 	hasTimeout bool
 	// 写保护机制sync.Mutex是一个结构体,其他的要么是接口要么是方法
-	writerMux *sync.Mutex //mutex是个结构,所以在实际实现我的ctx的时候,需要加{}
-
+	writerMux *sync.Mutex       //mutex是个结构,所以在实际实现我的ctx的时候,需要加{}
+	params    map[string]string // url路由匹配的参数
 }
 
 //返回一个自定义的Context,这是一个装饰器模型?还是工厂模式应该是工厂模式,没有修饰添加功能,只是返回一个Context结构
@@ -104,6 +105,11 @@ func (ctx *Context) HasTimeout() bool {
 	return ctx.hasTimeout
 }
 
+// 设置参数
+func (ctx *Context) SetParams(params map[string]string) {
+	ctx.params = params
+}
+
 // #endregio
 
 //这个函数返回一个基本的ctx以供使用
@@ -116,7 +122,7 @@ func (ctx *Context) BaseContext() context.Context {
 
 //这个Done函数其实request没有实现(因为request只是一个抽象类,它并没有具体实现),
 //那么编译器就会去上一层去找Done方法,这叫做代理delegate,最后找到了标准库的Done()方法
-//
+//因为我们type embeding 了官方ctx,所以我们也可以直接使用代理,我们自己不实现Done,value,err,Deadlin
 func (ctx *Context) Done() <-chan struct{} {
 	//同样Done函数也用BaseContext()的Done()(其实是request的Done(),但是request没有这个方法,
 	//就又会去标准库ctx找Done函数),就不用我们去实现了
@@ -139,34 +145,36 @@ func (ctx *Context) Value(key interface{}) interface{} {
 	return ctx.BaseContext().Value(key)
 }
 
+//以下两个函数在request中使用cast库重写了
+
 // #region query url 这个函数是查找url的一些条件
 //query url的几个方法都是基于Queryall方法,这个query all方法 又是调用的request.URL.Query()
 //在query all的基础上 修饰,修饰到符合自身的情况
-func (ctx *Context) QueryInt(key string, def int) int {
-	params := ctx.QueryAll()
-	if vals, ok := params[key]; ok {
-		len := len(vals)
-		if len > 0 {
-			intval, err := strconv.Atoi(vals[len-1])
-			if err != nil {
-				return def
-			}
-			return intval
-		}
-	}
-	return def
-}
+//func (ctx *Context) QueryInt(key string, def int) int {
+//	params := ctx.QueryAll()
+//	if vals, ok := params[key]; ok {
+//		len := len(vals)
+//		if len > 0 {
+//			intval, err := strconv.Atoi(vals[len-1])
+//			if err != nil {
+//				return def
+//			}
+//			return intval
+//		}
+//	}
+//	return def
+//}
 
-func (ctx *Context) QueryString(key string, def string) string {
-	params := ctx.QueryAll()
-	if vals, ok := params[key]; ok {
-		len := len(vals)
-		if len > 0 {
-			return vals[len-1]
-		}
-	}
-	return def
-}
+//func (ctx *Context) QueryString(key string, def string) string {
+//	params := ctx.QueryAll()
+//	if vals, ok := params[key]; ok {
+//		len := len(vals)
+//		if len > 0 {
+//			return vals[len-1]
+//		}
+//	}
+//	return def
+//}
 
 func (ctx *Context) QueryArray(key string, def []string) []string {
 	params := ctx.QueryAll()
@@ -174,15 +182,6 @@ func (ctx *Context) QueryArray(key string, def []string) []string {
 		return vals
 	}
 	return def
-}
-
-//QueryAll() 方法调用了request的URL.QUERY()的方法
-//
-func (ctx *Context) QueryAll() map[string][]string {
-	if ctx.request != nil {
-		return map[string][]string(ctx.request.URL.Query())
-	}
-	return map[string][]string{}
 }
 
 // #end of region query url
@@ -226,25 +225,27 @@ func (ctx *Context) FormArray(key string, def []string) []string {
 
 //
 
-func (ctx *Context) FormAll() map[string][]string {
-	if ctx.request != nil {
-		return map[string][]string(ctx.request.PostForm)
-	}
-	return map[string][]string{}
-}
+//func (ctx *Context) FormAll() map[string][]string {
+//	if ctx.request != nil {
+//		return map[string][]string(ctx.request.PostForm)
+//	}
+//	return map[string][]string{}
+//}
 
 // #endregion
 
 // #region application/json post
-
+// BindJson就是将 body 文本解析到 obj 结构体中
 func (ctx *Context) BindJson(obj interface{}) error {
 	if ctx.request != nil {
+		// 读取文本
 		body, err := ioutil.ReadAll(ctx.request.Body)
 		if err != nil {
 			return err
 		}
+		// 重新填充 request.Body，为后续的逻辑二次读取做准备
 		ctx.request.Body = ioutil.NopCloser(bytes.NewBuffer(body))
-
+		// 解析到 obj 结构体中
 		err = json.Unmarshal(body, obj)
 		if err != nil {
 			return err
@@ -259,28 +260,42 @@ func (ctx *Context) BindJson(obj interface{}) error {
 
 // #region response
 //status是返回的http状态码, obj是写入的字符串？也不一定是字符串
-func (ctx *Context) Json(status int, obj interface{}) error {
-	if ctx.HasTimeout() {
-		return nil
-	}
-	ctx.responseWriter.Header().Set("Content-Type", "application/json")
-	ctx.responseWriter.WriteHeader(status)
-	byt, err := json.Marshal(obj) //Marshal returns the JSON encoding of v,也就是八字
+//func (ctx *Context) Json(status int, obj interface{}) error {
+//	if ctx.HasTimeout() {
+//		return nil
+//	}
+//	ctx.responseWriter.Header().Set("Content-Type", "application/json")
+//	ctx.responseWriter.WriteHeader(status)
+//	byt, err := json.Marshal(obj)
+//	if err != nil {
+//		ctx.responseWriter.WriteHeader(500)
+//		return err
+//	}
+//	ctx.responseWriter.Write(byt)
+//	return nil
+//}
+func (ctx *Context) Json(obj interface{}) IResponse {
+	//Marshal returns the JSON encoding of v,也就是
 	//把想写的数据转为json,传给byt,然后byt在写入Response
+	byt, err := json.Marshal(obj)
 	if err != nil {
-		ctx.responseWriter.WriteHeader(500)
-		return err
+		return ctx.SetStatus(http.StatusInternalServerError)
 	}
+	ctx.SetHeader("Content-Type", "application/json")
 	ctx.responseWriter.Write(byt)
-	return nil
+	return ctx
 }
 
-func (ctx *Context) HTML(status int, obj interface{}, template string) error {
-	return nil
-}
+//func (ctx *Context) HTML(status int, obj interface{}, template string) error {
+//
+//	return nil
+//}
 
-func (ctx *Context) Text(status int, obj string) error {
-	return nil
+func (ctx *Context) Text(format string, values ...interface{}) IResponse {
+	out := fmt.Sprintf(format, values...)
+	ctx.SetHeader("Content-Type", "application/text")
+	ctx.responseWriter.Write([]byte(out))
+	return ctx
 }
 
 // #endregion
@@ -288,4 +303,35 @@ func (ctx *Context) Text(status int, obj string) error {
 // 为context设置handlers
 func (ctx *Context) SetHandlers(handlers []ControllerHandler) {
 	ctx.handlers = handlers
+}
+
+func (ctx *Context) SetHeader(key string, val string) IResponse {
+	ctx.responseWriter.Header().Add(key, val)
+	return ctx
+}
+func (ctx *Context) Xml(obj interface{}) IResponse {
+	return nil
+}
+
+func (ctx *Context) Redirect(path string) IResponse {
+	return nil
+}
+
+//在Response.go有具体实现了 这里就可以删掉了,本来就是个空实现
+//func (ctx *Context) Html(template string, obj interface{}) IResponse{
+//	return nil
+//}
+
+func (ctx *Context) SetCookie(key string, val string, maxAge int, path, domain string, secure, httpOnly bool) IResponse {
+
+	return nil
+}
+
+func (ctx *Context) SetStatus(code int) IResponse {
+
+	return nil
+}
+
+func (ctx *Context) SetOkStatus() IResponse {
+	return nil
 }
