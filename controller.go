@@ -2,8 +2,8 @@ package main
 
 import (
 	"context"
-	"coredemo/framework"
 	"fmt"
+	"github.com/sunranlike/hade/framework"
 	"time"
 )
 
@@ -38,7 +38,7 @@ func FooControllerHandler(c *framework.Context) error {
 		}()
 		// 这里做具体的业务
 		time.Sleep(10 * time.Second)
-		c.Json("ok").SetStatus(200)
+		c.IJson("ok").ISetStatus(200)
 		//
 		// 新的 goroutine 结束的时候通过一个 finish 通道告知父 goroutine
 		finish <- struct{}{}
@@ -50,7 +50,7 @@ func FooControllerHandler(c *framework.Context) error {
 		c.WriterMux().Lock()
 		defer c.WriterMux().Unlock()
 		//TODO
-		c.Json("panic").SetStatus(500)
+		c.IJson("panic").ISetStatus(500)
 		// 监听结束事件
 	case <-finish:
 		//TODO
@@ -60,8 +60,8 @@ func FooControllerHandler(c *framework.Context) error {
 		c.WriterMux().Lock()
 		defer c.WriterMux().Unlock()
 
-		c.Json("time out").SetStatus(500) //已经超时了
-		c.SetHasTimeout()                 //告诉大家和这个已经超时了
+		c.IJson("time out").ISetStatus(500) //已经超时了
+		c.SetHasTimeout()                   //告诉大家和这个已经超时了
 	}
 	return nil
 }

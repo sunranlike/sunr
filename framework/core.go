@@ -1,6 +1,7 @@
 package framework
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"strings"
@@ -14,40 +15,30 @@ type Core struct {
 	middlewares []ControllerHandler // 从core这边设置的中间件
 }
 
+func (core *Core) PrintRouter() {
+	fmt.Println(core.router)
+	fmt.Println(core.middlewares)
+}
+
 // NewCore 初始化框架核心结构,Newcore干嘛了?其实就是是:返回一个core结构体,这个core结构体
 //有一个router的map.key是string,value是一个ControllerHandler,是个函数,
 //这也是一种设计模式吧,key是string,对用的value是一个函数,这叫做函数工厂?应该不是，就是一个映射关系
 func NewCore() *Core {
-	//定义二级map的内容
-	//getRouter := map[string]ControllerHandler{}
-	//postRouter := map[string]ControllerHandler{}
-	//putRouter := map[string]ControllerHandler{}
-	//deleteRouter := map[string]ControllerHandler{}
-	//
-	//// 将二级map写入一级map，这样就完成了一个映射关系，外层的四个关键字Get，Post，Put，Delet
-	////又各自一一对应一个map，形成了二级map
-	//router := map[string]map[string]ControllerHandler{}
-	//router["GET"] = getRouter
-	//router["POST"] = postRouter
-	//router["PUT"] = putRouter
-	//router["DELETE"] = deleteRouter
-	//
-	//return &Core{router: router}
+	//Core的router原来是一个二级map,经过改造不是map了
+	//现在的map是一个
 	//实现了tree保存函数：
-	router := map[string]*Tree{}
-	router["GET"] = NewTree()
-	router["POST"] = NewTree()
-	router["PUT"] = NewTree()
-	router["DELETE"] = NewTree()
-	return &Core{router: router}
+	tempRouter := map[string]*Tree{} //先声明,然后这个temprouter会作为Core结构体的router这个field的值
+	tempRouter["GET"] = NewTree()    //存入这么二级map中
+	tempRouter["POST"] = NewTree()
+	tempRouter["PUT"] = NewTree()
+	tempRouter["DELETE"] = NewTree()
+	//以上操作将方法存入
+	return &Core{router: tempRouter} //返回这个结构,当然我们只对router做了赋值,而中间件还没有
 }
 
-// Get Get方法干嘛了?就是把参数作为key;value存入二级map中,相当于路由注册：调用这个函数就会生成
-//将url和对应的handler注册入map中 映射map就是：
-//router["GET"][upperUrl] = handler
-
-// Get core里面有个slice,这是个中间件middlewares,这个函数首先将第二个参数存入allHandlers这个slice
-//然后将这个通过router 的map 匹配get方法,然后通过AddRouter将url绑定到handlers
+//Get 方法首先将传入的处理器handlers存入c.middlewares这个slice,也就是core的中间件当中
+//然后调用调用c.router["GET"] 这个tree结构的AddRouter,这个方法将url网址和处理器 allHandlers 绑定
+//这样就可以使得处理器绑定到对应的url,使得
 func (c *Core) Get(url string, handlers ...ControllerHandler) {
 	//upperUrl := strings.ToUpper(url)
 	//c.router["GET"][upperUrl] = handler//注册为入二级map
@@ -91,7 +82,7 @@ func (c *Core) Delete(url string, handlers ...ControllerHandler) {
 	}
 }
 
-func (c *Core) Group(prefix string) IGroup {
+func (c *Core) Group(prefix string) IGroup { //为什么这样写?我在调用方直接用 NewGroup不行吗?
 	return NewGroup(c, prefix)
 }
 
@@ -103,14 +94,6 @@ func (c *Core) FindRouteNodeByRequest(request *http.Request) *node {
 	upperMethod := strings.ToUpper(method)
 	//upperUri := strings.ToUpper(uri)
 
-	// 查找第一层map，common ok格式的查找
-	//先查找第一层，匹配Method，也就是get这些
-	//if methodHandlers, ok := c.router[upperMethod]; ok {
-	//	// 查找第二层map，也就是取到了对应的method去匹配对应的uri
-	//	if handler, ok := methodHandlers[upperUri]; ok {
-	//		return handler//返回处理器
-	//	}
-	//}
 	if methodHandlers, ok := c.router[upperMethod]; ok {
 		return methodHandlers.root.matchNode(uri)
 	}
@@ -122,25 +105,20 @@ func (c *Core) FindRouteNodeByRequest(request *http.Request) *node {
 //这个ServeHttp是实际的业务逻辑,
 func (c *Core) ServeHTTP(response http.ResponseWriter, request *http.Request) {
 	log.Println("core.serveHTTP")
-	log.Println(request.URL, request.Method, request.Body)
+	log.Println(request.URL, request.Method)
 	ctx := NewContext(request, response) //这个已经不是简单地ctx了而是一个功能丰富的机构提
 	//只是名字还和ctx一样
 	// 寻找路由
 	node := c.FindRouteNodeByRequest(request) //升级为双向的
 	if node == nil {
 		// 如果没有找到，这里打印日志
-		ctx.SetStatus(404).Json("not found")
+		ctx.IJson("not found")
 		//ctx.SetStatus(404).Json("not found")
 		return
 	}
-	// 一个简单的路由选择器，这里直接写死为测试路由foo
-	//rotuer 是什么?是core的一个map,map映射的是一个函数,所以这里router最后是个函数
+
+	//rotuer 是什么?是core的一个map,map映射的是一个tree，这个tree是对应的方法
 	//寻找路由
-	//handlers := c.FindRouteByRequest(request)
-	//if handlers == nil {
-	//
-	//	return
-	//}
 
 	log.Println("core.router")
 	// 设置context中的handlers字段
@@ -148,23 +126,14 @@ func (c *Core) ServeHTTP(response http.ResponseWriter, request *http.Request) {
 	params := node.parseParamsFromEndNode(request.URL.Path)
 	ctx.SetParams(params)
 	// 调用路由函数，如果返回err 代表存在内部错误，返回500状态码
-	if err := ctx.Next(); err != nil {
-		ctx.Json("inner error").SetStatus(500)
+	if err := ctx.Next(); err != nil { //第一次的时候需要调用Next
+		ctx.IJson("inner error").ISetStatus(500)
 		return
 	}
-	//if err := router(ctx); err != nil {
-	//	ctx.Json(500, "inner error")
-	//	return
-	//}
-	//执行这个取出来的函数,当然要把ctx传入
 }
 
-//在源码中Handler 接口实际上只有一个函数 就是ServerHTTP方法，所以我们自己写一个ServeHttp就代表我们
+// Use 在源码中Handler 接口实际上只有一个函数 就是ServerHTTP方法，所以我们自己写一个ServeHttp就代表我们
 //使用自己的Handler，（实际上是一个ServerHttp方法）
-//type Handler interface {
-//	ServeHTTP(ResponseWriter, *Request)
-//}
-
 // Use 注册中间件,将变长参数middlewares绑定到core的middlewares中
 //使用变长参数的好处是可以加好多的参数比如说:
 //core.Use(middleware.Recovery(),middleware.RecordRequsstTime())

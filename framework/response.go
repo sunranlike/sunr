@@ -1,5 +1,6 @@
 package framework
 
+/*
 import (
 	"encoding/json"
 	"html/template"
@@ -38,6 +39,8 @@ type IResponse interface {
 	// 设置 200 状态
 	SetOkStatus() IResponse
 }
+
+
 
 // Jsonp 输出.jsonp就是为了跨域访问其他内容
 func (ctx *Context) Jsonp(obj interface{}) IResponse {
@@ -98,3 +101,4 @@ func (ctx *Context) Html(file string, obj interface{}) IResponse {
 	ctx.SetHeader("Content-Type", "application/html")
 	return ctx
 }
+*/

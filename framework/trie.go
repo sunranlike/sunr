@@ -27,7 +27,7 @@ func newNode() *node {
 	}
 }
 
-func NewTree() *Tree {
+func NewTree() *Tree { //存入
 	root := newNode()
 	return &Tree{root}
 }
@@ -102,7 +102,7 @@ func (n *node) matchNode(uri string) *node {
 	return nil
 }
 
-// 增加路由节点, 路由节点有先后顺序
+// AddRouter 增加路由节点, 路由节点有先后顺序
 /*
 /book/list
 /book/:id (冲突)
@@ -111,6 +111,7 @@ func (n *node) matchNode(uri string) *node {
 /:user/name(冲突)
 /:user/name/:age
 */
+//AddRouter将对应的handler这个slice存入字典树中，使得url对应handler
 func (tree *Tree) AddRouter(uri string, handlers []ControllerHandler) error {
 	n := tree.root
 	if n.matchNode(uri) != nil {

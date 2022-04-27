@@ -1,10 +1,12 @@
+package framework
+
 /*
 这个是自己写的context,为的就是方便使用,当然自己的ctx需要实现官方包的ctx的方法
 然而这个方法并不需要你手动实现,你只需要直接用*http.Request包的context
 怎么用:使用BaseContext()函数,他直接
 */
+/*
 
-package framework
 
 import (
 	"bytes"
@@ -14,6 +16,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"strconv"
 	"sync"
 	"time"
@@ -28,7 +31,6 @@ type Context struct {
 	//https://blog.csdn.net/qq_34556414/article/details/122296968
 	//如果是比较大的结构体，每次参数传递或者调用方法都要内存拷贝，
 	//内存占用多，这时候可以考虑使用指针；
-	//另外我们的基本ctx
 
 	//一般不会需要指向接口的指针，应该将接口作为值传递
 	//因为接口低层就是个指针
@@ -45,6 +47,9 @@ type Context struct {
 	// 写保护机制sync.Mutex是一个结构体,其他的要么是接口要么是方法
 	writerMux *sync.Mutex       //mutex是个结构,所以在实际实现我的ctx的时候,需要加{}
 	params    map[string]string // url路由匹配的参数
+
+	queryCache interface{}
+	Request    interface{}
 }
 
 //返回一个自定义的Context,这是一个装饰器模型?还是工厂模式应该是工厂模式,没有修饰添加功能,只是返回一个Context结构
@@ -56,7 +61,8 @@ func NewContext(r *http.Request, w http.ResponseWriter) *Context {
 		request:        r,
 		responseWriter: w,
 		ctx:            r.Context(),
-		writerMux:      &sync.Mutex{}, //这里必须要加{},why?很简单,这里需要的是一个地址,一个实际的地址,而不加{}
+		writerMux:      &sync.Mutex{},
+		//这里必须要加{},why?很简单,这里需要的是一个地址,一个实际的地址,而不加{}
 		//的话并只是一个实际数据结构 sync.Mutex ,而仅仅只是一个
 		index: -1,
 	}
@@ -146,7 +152,6 @@ func (ctx *Context) Value(key interface{}) interface{} {
 }
 
 //以下两个函数在request中使用cast库重写了
-
 // #region query url 这个函数是查找url的一些条件
 //query url的几个方法都是基于Queryall方法,这个query all方法 又是调用的request.URL.Query()
 //在query all的基础上 修饰,修饰到符合自身的情况
@@ -183,7 +188,15 @@ func (ctx *Context) QueryArray(key string, def []string) []string {
 	}
 	return def
 }
-
+func (c *Context) initQueryCache() {
+	if c.queryCache == nil {
+		if c.Request != nil {
+			//c.queryCache = c.Request.URL.Query()
+		} else {
+			c.queryCache = url.Values{}
+		}
+	}
+}
 // #end of region query url
 
 // #region form post
@@ -223,14 +236,6 @@ func (ctx *Context) FormArray(key string, def []string) []string {
 	return def
 }
 
-//
-
-//func (ctx *Context) FormAll() map[string][]string {
-//	if ctx.request != nil {
-//		return map[string][]string(ctx.request.PostForm)
-//	}
-//	return map[string][]string{}
-//}
 
 // #endregion
 
@@ -259,29 +264,15 @@ func (ctx *Context) BindJson(obj interface{}) error {
 // #endregion
 
 // #region response
-//status是返回的http状态码, obj是写入的字符串？也不一定是字符串
-//func (ctx *Context) Json(status int, obj interface{}) error {
-//	if ctx.HasTimeout() {
-//		return nil
-//	}
-//	ctx.responseWriter.Header().Set("Content-Type", "application/json")
-//	ctx.responseWriter.WriteHeader(status)
-//	byt, err := json.Marshal(obj)
-//	if err != nil {
-//		ctx.responseWriter.WriteHeader(500)
-//		return err
-//	}
-//	ctx.responseWriter.Write(byt)
-//	return nil
-//}
-func (ctx *Context) Json(obj interface{}) IResponse {
+
+func (ctx *Context) IJson(obj interface{}) IResponse {
 	//Marshal returns the JSON encoding of v,也就是
 	//把想写的数据转为json,传给byt,然后byt在写入Response
 	byt, err := json.Marshal(obj)
 	if err != nil {
-		return ctx.SetStatus(http.StatusInternalServerError)
+		return ctx.ISetStatus(http.StatusInternalServerError)
 	}
-	ctx.SetHeader("Content-Type", "application/json")
+	ctx.ISetHeader("Content-Type", "application/json")
 	ctx.responseWriter.Write(byt)
 	return ctx
 }
@@ -291,9 +282,9 @@ func (ctx *Context) Json(obj interface{}) IResponse {
 //	return nil
 //}
 
-func (ctx *Context) Text(format string, values ...interface{}) IResponse {
+func (ctx *Context) IText(format string, values ...interface{}) IResponse {
 	out := fmt.Sprintf(format, values...)
-	ctx.SetHeader("Content-Type", "application/text")
+	ctx.ISetHeader("Content-Type", "application/text")
 	ctx.responseWriter.Write([]byte(out))
 	return ctx
 }
@@ -305,15 +296,17 @@ func (ctx *Context) SetHandlers(handlers []ControllerHandler) {
 	ctx.handlers = handlers
 }
 
-func (ctx *Context) SetHeader(key string, val string) IResponse {
+func (ctx *Context) ISetHeader(key string, val string) IResponse {
 	ctx.responseWriter.Header().Add(key, val)
 	return ctx
 }
-func (ctx *Context) Xml(obj interface{}) IResponse {
+
+func (ctx *Context) IXml(obj interface{}) IResponse {
 	return nil
 }
 
-func (ctx *Context) Redirect(path string) IResponse {
+func (ctx *Context) IRedirect(path string) IResponse {
+
 	return nil
 }
 
@@ -322,16 +315,18 @@ func (ctx *Context) Redirect(path string) IResponse {
 //	return nil
 //}
 
-func (ctx *Context) SetCookie(key string, val string, maxAge int, path, domain string, secure, httpOnly bool) IResponse {
+func (ctx *Context) ISetCookie(key string, val string, maxAge int, path, domain string, secure, httpOnly bool) IResponse {
 
 	return nil
 }
 
-func (ctx *Context) SetStatus(code int) IResponse {
+func (ctx *Context) ISetStatus(code int) IResponse {
 
 	return nil
 }
 
-func (ctx *Context) SetOkStatus() IResponse {
+func (ctx *Context) ISetOkStatus() IResponse {
 	return nil
 }
+
+*/

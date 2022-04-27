@@ -1,33 +1,35 @@
 package main
 
-import "coredemo/framework"
+import (
+	"github.com/sunranlike/hade/framework/gin"
+)
 
-func SubjectAddController(c *framework.Context) error {
-	c.Json("ok, SubjectAddController").SetStatus(200)
+func SubjectAddController(c *gin.Context) error {
+	c.IJson("ok, SubjectAddController").ISetStatus(200)
 	return nil
 }
 
-func SubjectListController(c *framework.Context) error {
-	c.Json("ok, SubjectListController").SetStatus(200)
+func SubjectListController(c *gin.Context) error {
+	c.IJson("ok, SubjectListController").ISetStatus(200)
 	return nil
 }
 
-func SubjectDelController(c *framework.Context) error {
-	c.Json("ok, SubjectDelController").SetStatus(200)
+func SubjectDelController(c *gin.Context) error {
+	c.IJson("ok, SubjectDelController").ISetStatus(200)
 	return nil
 }
 
-func SubjectUpdateController(c *framework.Context) error {
-	c.Json("ok, SubjectUpdateController").SetStatus(200)
+func SubjectUpdateController(c *gin.Context) error {
+	c.IJson("ok, SubjectUpdateController").ISetStatus(200)
 	return nil
 }
 
-func SubjectGetController(c *framework.Context) error {
-	c.Json("ok, SubjectGetController").SetStatus(200)
+func SubjectGetController(c *gin.Context) error {
+	c.IJson("ok, SubjectGetController").ISetStatus(200)
 	return nil
 }
 
-func SubjectNameController(c *framework.Context) error {
-	c.Json("ok, SubjectNameController").SetStatus(200)
+func SubjectNameController(c *gin.Context) error {
+	c.IJson("ok, SubjectNameController").ISetStatus(200)
 	return nil
 }

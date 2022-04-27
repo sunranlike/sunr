@@ -5,7 +5,7 @@ import "github.com/spf13/cast"
 
 const defaultMultipartMemory = 32 << 20 // 32 MB
 // 代表请求包含的方法
-type IRequest interface {
+type HadeRequest interface {
 	// QueryInt 请求地址 url 中带的参数
 	// 形如: foo.com?a=1&b=bar&c[]=bar
 	QueryInt(key string, def int) (int, bool)
@@ -60,14 +60,6 @@ type IRequest interface {
 	// cookie
 	Cookies() map[string]string
 	Cookie(key string) (string, bool)
-}
-
-// 获取请求地址中所有参数
-func (ctx *Context) QueryAll() map[string][]string {
-	if ctx.request != nil {
-		return map[string][]string(ctx.request.URL.Query())
-	}
-	return map[string][]string{}
 }
 
 // 获取 Int 类型的请求参数

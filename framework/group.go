@@ -16,6 +16,7 @@ type IGroup interface {
 }
 
 // Group struct 实现了IGroup
+//group就是路由组,路由组的功能就是避免每个网址都写一个路由规则.有了路由规则就能分组和嵌套,大大提高效率
 type Group struct {
 	core   *Core  // 指向core结构
 	parent *Group //指向上一个Group，如果有的话,可以实现链式存储
