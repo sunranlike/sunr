@@ -6,6 +6,11 @@ import (
 )
 
 // Container 是一个服务容器，提供绑定服务和获取服务的功能
+//我们要在framework中定义container接口和provider接口
+//并且要在框架文件夹内定义一个实现container接口的结构体。
+//但是provide接口不需要在框架文件夹内实现
+//这样实现了核心容器只有一个实现，而你的服务可以有多种实现。
+//
 type Container interface {
 	// Bind 绑定一个服务提供者，如果关键字凭证已经存在，会进行替换操作，返回 error
 	Bind(provider ServiceProvider) error
@@ -14,6 +19,7 @@ type Container interface {
 
 	// Make 根据关键字凭证获取一个服务，
 	Make(key string) (interface{}, error)
+
 	// MustMake 根据关键字凭证获取一个服务，如果这个关键字凭证未绑定服务提供者，那么会 panic。
 	// 所以在使用这个接口的时候请保证服务容器已经为这个关键字凭证绑定了服务提供者。
 	MustMake(key string) interface{}
@@ -24,6 +30,8 @@ type Container interface {
 }
 
 // HadeContainer 是服务容器的具体实现,服务可以注册入这个结构
+//这个结构也会作为返回值返回给gin的engine字段的Container接口
+//当然就需要这个结构体实现接口描述的方法
 type HadeContainer struct {
 	Container // 强制要求 HadeContainer 实现 Container 接口
 	// providers 存储注册的服务提供者，key 为字符串凭证
@@ -34,6 +42,8 @@ type HadeContainer struct {
 	lock sync.RWMutex
 }
 
+//下面对framework.container接口进行实现。
+
 // Bind 将服务容器和关键字做了绑定,
 //该函数做绑定,将服务提供者注册到provider容器之中,name作为key,ServiceProvider作为value
 //然后判断是否延迟实例化,如果不是延迟实例化,注册的时候就需要实例化
@@ -41,6 +51,7 @@ type HadeContainer struct {
 func (hade *HadeContainer) Bind(provider ServiceProvider) error {
 	hade.lock.Lock() //加锁，并且是读写锁。
 	defer hade.lock.Unlock()
+
 	key := provider.Name() //获取服务名
 
 	hade.providers[key] = provider //name:provider存入map中
@@ -48,13 +59,13 @@ func (hade *HadeContainer) Bind(provider ServiceProvider) error {
 	//如果不需要注册时实例化,这里就结束了
 
 	// 如果注册时就要实例化,这里开始进行实例化
-	if provider.IsDefer() == false { //如果这个server就是必须注册就要实例化的,那么boot中就要有他的实例化方法
+	if provider.IsDefer() == false { //不延迟实例化的话，那么立马实例化出来这个服务。
 		if err := provider.Boot(hade); err != nil { //这个服务Bind函数中有实例化的方法
 			return err
 		}
 		// 实例化方法,因为这里已经声明了注册时既要实现
 		params := provider.Params(hade)    //参数获取
-		method := provider.Register(hade)  //注册NewInstance实例化方法
+		method := provider.Register(hade)  //注册NewInstance实例化方法，除了此处还有newInstance也会使用。
 		instance, err := method(params...) //调用NewInstance实例化方法
 		if err != nil {                    //捕获错误
 			return errors.New(err.Error())
@@ -64,9 +75,28 @@ func (hade *HadeContainer) Bind(provider ServiceProvider) error {
 	return nil
 }
 
+func (hade *HadeContainer) IsBind(key string) bool {
+	return hade.findServiceProvider(key) != nil
+}
+func (hade *HadeContainer) findServiceProvider(key string) ServiceProvider {
+	hade.lock.RLock()
+	defer hade.lock.RUnlock()
+	if sp, ok := hade.providers[key]; ok {
+		return sp
+	}
+	return nil
+}
+
 // Make 方式调用内部的 make 实现
 func (hade *HadeContainer) Make(key string) (interface{}, error) {
 	return hade.make(key, nil, false)
+}
+func (hade *HadeContainer) MustMake(key string) interface{} {
+	serv, err := hade.make(key, nil, false)
+	if err != nil {
+		panic(err)
+	}
+	return serv
 }
 
 // MakeNew 方式使用内部的 make 初始化
@@ -78,8 +108,8 @@ func (hade *HadeContainer) MakeNew(key string, params []interface{}) (interface{
 func (hade *HadeContainer) make(key string, params []interface{}, forceNew bool) (interface{}, error) {
 	hade.lock.RLock()
 	defer hade.lock.RUnlock()
-	// 查询是否已经注册了这个服务提供者，如果没有注册，则返回错误
-	sp := hade.findServiceProvider(key)
+	// 查询是否已经注册了这个服务提供者，如果没有注册，则返回错误，你都没有注册你申请个p
+	sp := hade.findServiceProvider(key) //
 	if sp == nil {
 		return nil, errors.New("contract " + key + " have not register")
 	}
@@ -89,28 +119,41 @@ func (hade *HadeContainer) make(key string, params []interface{}, forceNew bool)
 	}
 
 	// 不需要强制重新实例化，如果容器中已经实例化了，那么就直接使用容器中的实例
+	//hade.instances[]就是一个存放着实例化对象的池子，你想要make一个服务，就去这个里面找你要的服务，有的话直接返回。
 	if ins, ok := hade.instances[key]; ok { //common ok 语法,判断是否存在一个实例化了的服务
 		return ins, nil //存在返回找个服务
 	}
 
-	// 容器中还未实例化，则进行一次实例化
+	// 你要的实例我们的实例容器中还未实例化，则进行一次实例化
 	inst, err := hade.newInstance(sp, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	hade.instances[key] = inst //实例服务存入实例服务map中,并返回
+	hade.instances[key] = inst //实例服务存入实例容器中,并将这个返回
 	return inst, nil
 }
 
-func (hade *HadeContainer) findServiceProvider(key string) interface{} {
-
-	return nil
+//估计这里是要去使用register方法？因为我们还没有把方法注册
+func (hade *HadeContainer) newInstance(sp ServiceProvider, params []interface{}) (interface{}, error) {
+	// force new a
+	if err := sp.Boot(hade); err != nil {
+		return nil, err
+	}
+	if params == nil {
+		params = sp.Params(hade)
+	}
+	method := sp.Register(hade)
+	ins, err := method(params...)
+	if err != nil {
+		return nil, errors.New(err.Error())
+	}
+	return ins, err
 }
 
-func (hade *HadeContainer) newInstance(sp interface{}, params []interface{}) (interface{}, error) {
-	return nil, nil
-}
+//这个函数是干嘛的？我们需要将容器融入gin框架，所以在gin的Engine结构体中嵌入了一个container字段，
+//他是framework.Container接口，所以我们需要一个结构体实现这个接口的方法。这就是我们的HadeContainer,上面的几个方法都是为了实现container接口
+//为什么用一个函数？简洁？
 
 func NewHadeContainer() *HadeContainer {
 	return &HadeContainer{

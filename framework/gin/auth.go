@@ -7,10 +7,9 @@ package gin
 import (
 	"crypto/subtle"
 	"encoding/base64"
+	"github.com/sunranlike/hade/framework/gin/internal/bytesconv"
 	"net/http"
 	"strconv"
-
-	"github.com/gin-gonic/gin/internal/bytesconv"
 )
 
 // AuthUserKey is the cookie name for user credential in basic auth.

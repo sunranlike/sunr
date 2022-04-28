@@ -3,7 +3,8 @@ package main
 import (
 	"context"
 	"github.com/sunranlike/hade/framework/gin"
-	"github.com/sunranlike/hade/framework/provider/demo"
+	"github.com/sunranlike/hade/framework/middleware"
+	"github.com/sunranlike/hade/provider/demo"
 	"log"
 	"net/http"
 	"os"
@@ -12,13 +13,26 @@ import (
 )
 
 func main() {
-	//core := framework.NewCore()                                     //注册声明一个core,这个Newcore函数,core到底是什么?core是一个实现了ServeHttp方法的结构体,也就是说core实现了Handler接口
-	//core.Use(middleware.Recovery()) //将中间件添加到slice中
-	//core.Use(middleware.CostTime())
-	////为什么registerRouter可以实现core的路由功能?因为这个函数追究到底调用了了core的Get方法,这个方法可以把url注册到core的router中
-	//registerRouter(core)
+	//调用gin的New函数,他返回的是一个Engine结构体
+	//我们队Gin的Engine结构进行了修改,多了一个字段:container framework.Container
+	//framework.Container是个结构,所以New返回的机构体必须实现这个接口,
+	//因为Gin的New函数本来就实现了除了我们添加的字段的以外的初始化,
+	//所以我们只需要在New函数中增加一个实现Container接口的结构体就是合法赋值
+	//我们使用了NewHadeContainer()这个函数,他返回了一个实现Container接口的结构体
+
 	core := gin.New()
+
 	core.Bind(&demo.DemoServiceProvider{})
+	//这里使用了两个全局中间件：
+	//golang的net/http设计的一大特点就是特别容易构建中间件。
+	//gin也提供了类似的中间件。需要注意的是中间件只对注册过的路由函数起作用。
+	//对于分组路由，嵌套使用中间件，可以限定中间件的作用范围。
+	//中间件分为全局中间件，单个路由中间件和群组中间件。
+
+	core.Use(gin.Recovery())
+	core.Use(middleware.Cost()) //这两个是全局中间件
+
+	registerRouter(core)
 	//fmt.Println(core)
 	//注册core,目的是为了绑定foo与FooControllerHandler,让他们一个作为map一个作为value
 	server := &http.Server{ //这个结构体的Handler字段就只去使用自己的Handler函数

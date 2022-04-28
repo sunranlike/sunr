@@ -56,7 +56,7 @@ type RoutesInfo []RouteInfo
 // Engine is the framework's instance, it contains the muxer, middleware and configuration settings.
 // Create an instance of Engine, by using New() or Default()
 type Engine struct {
-	// 容器
+	// 容器，我在这个结构内定义了Container这个接口，那么一个合法的Engine结构就必须要实现这个接口
 	container framework.Container
 	RouterGroup
 
@@ -148,7 +148,11 @@ var _ IRouter = &Engine{}
 // - ForwardedByClientIP:    true
 // - UseRawPath:             false
 // - UnescapePathValues:     true
-func New() *Engine {
+//
+//我们改造容器化的两个重要概念:1是服务框架核心,2是服务提供者
+//框架核心Engine就是主要有Bind/Make两个方法,
+//这两个方法一个负责注册绑定bind,既将服务提供者提供的服务绑定到容器里,一切皆服务,缓存,日志都是服务.我们注册好了才好实例化服务
+func New() *Engine { //我们额外对Container字段也进行了修改,对allocateContext也进行了修改,使其返回值也带一个container
 	debugPrintWARNINGNew()
 	engine := &Engine{
 		RouterGroup: RouterGroup{
@@ -171,11 +175,20 @@ func New() *Engine {
 		trees:                  make(methodTrees, 0, 9),
 		delims:                 render.Delims{Left: "{{", Right: "}}"},
 		secureJSONPrefix:       "while(1);",
-		// 这里注入了    container
+		// 这个函数们返回的hadeContainer是一个实现了framework.Container接口的结构体，所以可以作为合法右值
+		//这样我们调用的New函数返回的的Engine结构体就实现了这个接口
 		container: framework.NewHadeContainer(),
-	}
-	engine.RouterGroup.engine = engine
+	} //这时候只是创建好了一个结构体,还没有返回呢
+
+	engine.RouterGroup.engine = engine //因为是New方法所以没有Parent,所以RouterGroup就是自己
+
+	//gin结构将线程池pool嵌入了engine结构体中,pool结构就是一个线程池,目的为了避免重复新建结构体浪费时间
+	//任何使用pool的结构体都需要实现这个字字段的New函数,为什么?
+	//原因在于pool是一个通用的字段.所有想要实现这个线程池功能结构体,都需要实现给pool.New字段一个合适的方法
+	//为什么?因为只有这样,每次新建结构体的时候,编译器才知道怎样开辟底层内存,当然这个结构是Context
+	//New帮助的是Get方法,当你调用pool的Get时,如gin.Get, 如果你没有设置New方法,那么他就会返回nil,如果你设置了New方法,就会调用New方法并返回.
 	engine.pool.New = func() interface{} {
+
 		return engine.allocateContext()
 	}
 	return engine
@@ -189,6 +202,7 @@ func Default() *Engine {
 	return engine
 }
 
+//传给New字段的方法,返回值是个Context,在上层调用Gin结构体的get方法时
 func (engine *Engine) allocateContext() *Context {
 	v := make(Params, 0, engine.maxParams)
 	// 在分配新的 Context 的时候，注入了 container

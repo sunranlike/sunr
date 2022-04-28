@@ -2,8 +2,8 @@ package main
 
 //route是干嘛的?其实就是路由功能,将一些方法注册到core的,把参数作为key;value存入map中
 import (
-	"github.com/sunranlike/hade/framework"
 	"github.com/sunranlike/hade/framework/gin"
+	"github.com/sunranlike/hade/framework/middleware"
 )
 
 // 注册路由匹配规则,什么样的uri匹配什么样的Controller
@@ -18,7 +18,7 @@ func registerRouter(core *gin.Engine) { //
 	//根据http  head 的method 执行对应的Handler
 	//在核心业务逻辑 UserLoginController 之外，封装一层 TimeoutHandler
 	//get方法将url网址和handler处理器 绑定一起,但其实底层都是一个map对应一个字典树
-	core.Get("/user/login", UserLoginController)
+	core.GET("/user/login", middleware.Cost(), UserLoginController)
 
 	//上一步core绑定了"/user/login"这个urlUI对应的handler,这个就是所谓的静态路由,一个url对应一个handler
 	//效率不高,但是我们可以通过路由组group功能实现批量匹配,提高效率
@@ -36,19 +36,19 @@ func registerRouter(core *gin.Engine) { //
 	{
 		// 动态路由"/:id"
 		//只要匹配到"/:id" 就会执行delete put get 三个方法
-		subjectApi1.Delete("/:id", SubjectDelController) //Group调用get/put 方法本质上还是调用的core的,只不过修饰了一个中间件
-		subjectApi1.Put("/:id", SubjectUpdateController)
-		subjectApi1.Get("/:id", SubjectGetController)
+		subjectApi1.DELETE("/:id", SubjectDelController) //Group调用get/put 方法本质上还是调用的core的,只不过修饰了一个中间件
+		subjectApi1.PUT("/:id", SubjectUpdateController)
+		subjectApi1.GET("/:id", SubjectGetController)
 		subjectListApi := subjectApi1.Group("/list") //在Api1上再 在添加一个Api，也就是一个新的group，路由进入新的api也要符合上一层的路由规则
 		//分组的关键，这样子才能嵌套，必须要使用上层的group作为右值
 		//这样的左值在使用get方法才会形成嵌套
 		{
-			subjectListApi.Get("/all", SubjectListController)
+			subjectListApi.GET("/all", SubjectListController)
 		}
 
 		subjectInnerApi := subjectApi1.Group("/info")
 		{
-			subjectInnerApi.Get("/name", SubjectNameController)
+			subjectInnerApi.GET("/name", SubjectNameController)
 		}
 	}
 

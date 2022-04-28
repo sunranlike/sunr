@@ -1,15 +1,15 @@
 package middleware
 
 import (
-	"github.com/sunranlike/hade/framework"
+	_ "github.com/sunranlike/hade/framework"
 	"github.com/sunranlike/hade/framework/gin"
 	"log"
 	"time"
 )
 
-func Cost() framework.ControllerHandler {
+func Cost() gin.HandlerFunc {
 	// 使用函数回调
-	return func(c *gin.Context) error {
+	return func(c *gin.Context) {
 		// 获取开始时间
 		startT := time.Now()
 		// 输出请求URI
@@ -22,6 +22,5 @@ func Cost() framework.ControllerHandler {
 		tc := time.Since(startT)
 		log.Printf("api uri end: %v, cost: %v", c.Request.RequestURI, tc)
 
-		return nil
 	}
 }
