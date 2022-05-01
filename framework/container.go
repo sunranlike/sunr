@@ -154,7 +154,6 @@ func (hade *HadeContainer) newInstance(sp ServiceProvider, params []interface{})
 //这个函数是干嘛的？我们需要将容器融入gin框架，所以在gin的Engine结构体中嵌入了一个container字段，
 //他是framework.Container接口，所以我们需要一个结构体实现这个接口的方法。这就是我们的HadeContainer,上面的几个方法都是为了实现container接口
 //为什么用一个函数？简洁？
-
 func NewHadeContainer() *HadeContainer {
 	return &HadeContainer{
 		providers: map[string]ServiceProvider{},
