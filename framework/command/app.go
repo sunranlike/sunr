@@ -12,6 +12,8 @@ import (
 	"time"
 )
 
+// AppCommand 是命令行参数第一级为 app 的命令，它没有实际功能，只是打印帮助文档
+
 // initAppCommand 初始化app命令和其子命令
 func initAppCommand() *cobra.Command {
 	appCommand.AddCommand(appStartCommand)

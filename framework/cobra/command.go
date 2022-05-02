@@ -48,9 +48,9 @@ type Command struct {
 	//       optional, they are enclosed in brackets ([ ]).
 	// Example: add [-F file | -D dir]... [-f format] profile
 
-	//服务容器嵌入服务容器的好处？我们将服务容器嵌入命令行，这样就可以用命令行开启服务。
+	//服务容器嵌入服务容器的好处？我们将服务容器嵌入命令行结构command，这样就可以用命令行开启服务。
 	//command结构是所有命令参数的子节点，这个command是个根。
-	//子命令通过获取根节点可以获取倒container容器
+	//所有子命令都可以通过获取根节点可以获取倒container容器
 	container framework.Container
 
 	Use string
