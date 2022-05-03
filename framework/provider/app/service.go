@@ -85,13 +85,14 @@ func (h HadeApp) TestFolder() string {
 	return filepath.Join(h.BaseFolder(), "test")
 }
 
-// NewHadeApp 初始化HadeApp
+// NewHadeApp 该函数作为Register函数的返回值,他需要服务和NewInstance的函数签名
+//NewInstance签名:type NewInstance func(...interface{}) (interface{}, error)
 func NewHadeApp(params ...interface{}) (interface{}, error) {
 	if len(params) != 2 {
 		return nil, errors.New("param error")
 	}
 
-	// 有两个参数，一个是容器，一个是baseFolder
+	// 解析参数:有两个参数，一个是容器，一个是baseFolder
 	container := params[0].(framework.Container)
 	baseFolder := params[1].(string)
 	return &HadeApp{baseFolder: baseFolder, container: container}, nil
