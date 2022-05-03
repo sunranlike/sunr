@@ -5,6 +5,7 @@ import (
 	"github.com/sunranlike/hade/framework"
 	"github.com/sunranlike/hade/framework/cobra"
 	"github.com/sunranlike/hade/framework/command"
+	"time"
 )
 
 // RunCommand  初始化根Command并运行
@@ -48,5 +49,5 @@ func RunCommand(container framework.Container) error {
 func AddAppCommand(rootCmd *cobra.Command) {
 	//  demo 例子
 	//rootCmd.AddCommand(demo.InitFoo())
-	rootCmd.AddCronCommand("* * * * * *", demo.FooCommand)
+	rootCmd.AddDistributedCronCommand("foo_func_for_test", "* * * * * *", demo.FooCommand, 2*time.Second)
 }

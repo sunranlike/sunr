@@ -3,6 +3,7 @@ package app
 import (
 	"errors"
 	"flag"
+	"github.com/google/uuid"
 	"github.com/sunranlike/hade/framework"
 	"github.com/sunranlike/hade/framework/util"
 
@@ -13,6 +14,7 @@ import (
 type HadeApp struct {
 	container  framework.Container // 服务容器
 	baseFolder string              // 基础路径
+	appId      string              // 表示当前这个app的唯一id, 可以用于分布式锁等
 }
 
 // Version 实现版本
@@ -24,14 +26,6 @@ func (h HadeApp) Version() string {
 func (h HadeApp) BaseFolder() string {
 	if h.baseFolder != "" {
 		return h.baseFolder
-	}
-
-	// 如果没有设置，则使用参数
-	var baseFolder string
-	flag.StringVar(&baseFolder, "base_folder", "", "base_folder参数, 默认为当前路径")
-	flag.Parse()
-	if baseFolder != "" {
-		return baseFolder
 	}
 
 	// 如果参数也没有，使用默认的当前路径
@@ -85,15 +79,26 @@ func (h HadeApp) TestFolder() string {
 	return filepath.Join(h.BaseFolder(), "test")
 }
 
-// NewHadeApp 该函数作为Register函数的返回值,他需要服务和NewInstance的函数签名
-//NewInstance签名:type NewInstance func(...interface{}) (interface{}, error)
+// NewHadeApp 初始化HadeApp
 func NewHadeApp(params ...interface{}) (interface{}, error) {
 	if len(params) != 2 {
 		return nil, errors.New("param error")
 	}
 
-	// 解析参数:有两个参数，一个是容器，一个是baseFolder
+	// 有两个参数，一个是容器，一个是baseFolder
 	container := params[0].(framework.Container)
 	baseFolder := params[1].(string)
-	return &HadeApp{baseFolder: baseFolder, container: container}, nil
+	// 如果没有设置，则使用参数
+	if baseFolder == "" {
+		flag.StringVar(&baseFolder, "base_folder", "", "base_folder参数, 默认为当前路径")
+		flag.Parse()
+	}
+	//appid就是一个唯一的服务识别编码,用于分布式锁
+	appId := uuid.New().String()
+	return &HadeApp{baseFolder: baseFolder, container: container, appId: appId}, nil
+}
+
+// AppID 表示这个App的唯一ID
+func (h HadeApp) AppID() string {
+	return h.appId
 }
