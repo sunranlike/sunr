@@ -19,6 +19,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"github.com/robfig/cron/v3"
 	"github.com/sunranlike/hade/framework"
 
 	"io"
@@ -52,6 +53,14 @@ type Command struct {
 	//command结构是所有命令参数的子节点，这个command是个根。
 	//所有子命令都可以通过获取根节点可以获取倒container容器
 	container framework.Container
+
+	// Command支持cron，只在RootCommand中有这个值,
+	//Cron可以执行定时任务，这里也是类似将容器融入command之中，把cron融入了command
+	//这样我们可以直接通过命令行执行定时任务
+	Cron *cron.Cron
+	//除了在根 Command 结构中放入 Cron 实例，
+	//我还放入了一个 CronSpecs 的切片，这个切片用来保存所有 Cron 命令的信息，为后续查看所有定时任务而准备。
+	CronSpecs []CronSpec
 
 	Use string
 
@@ -230,16 +239,6 @@ type Command struct {
 	// SuggestionsMinimumDistance defines minimum levenshtein distance to display suggestions.
 	// Must be > 0.
 	SuggestionsMinimumDistance int
-}
-
-// SetContainer 设置服务容器,将外部的服务容器container传入Command结构中,实现了容器的传递.
-func (c *Command) SetContainer(container framework.Container) {
-	c.container = container
-}
-
-// GetContainer 获取自己的容器,并且因为只有根节点Command有这个节点
-func (c *Command) GetContainer() framework.Container {
-	return c.Root().container
 }
 
 // Context returns underlying command context. If command wasn't

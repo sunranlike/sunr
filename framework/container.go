@@ -108,7 +108,7 @@ func (hade *HadeContainer) MakeNew(key string, params []interface{}) (interface{
 func (hade *HadeContainer) make(key string, params []interface{}, forceNew bool) (interface{}, error) {
 	hade.lock.RLock()
 	defer hade.lock.RUnlock()
-	// 查询是否已经注册了这个服务提供者，如果没有注册，则返回错误，你都没有注册你申请个p
+	// 查询是否已经绑定注册了这个服务提供者，如果没有注册，则返回错误，你都没有绑定注册你申请个p
 	sp := hade.findServiceProvider(key) //
 	if sp == nil {
 		return nil, errors.New("contract " + key + " have not register")

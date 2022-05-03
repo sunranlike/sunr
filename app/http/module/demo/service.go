@@ -5,7 +5,7 @@ type Service struct {
 }
 
 func NewService() *Service {
-	repository := NewRepository()
+	repository := NewRepository() //repository是个啥
 	return &Service{
 		repository: repository,
 	}

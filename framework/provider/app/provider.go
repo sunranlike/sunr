@@ -6,13 +6,14 @@ import (
 )
 
 // HadeAppProvider 提供App的具体实现方法
+//这个结构提供一个基础的目录服务,属于框架级别服务
 type HadeAppProvider struct {
 	BaseFolder string
 }
 
 // Register 注册HadeApp方法
 func (h *HadeAppProvider) Register(container framework.Container) framework.NewInstance {
-	return NewHadeApp
+	return NewHadeApp //实例化注册方法需要在service中具体实现.
 }
 
 // Boot 启动调用

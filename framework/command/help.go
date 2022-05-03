@@ -7,7 +7,8 @@ import (
 )
 
 // helpCommand show current envionment
-var DemoCommand = &cobra.Command{
+//一个demo的框架级命令
+var FrameworkDemoCommand = &cobra.Command{
 	Use:   "demo",
 	Short: "demo for framework",
 	Run: func(c *cobra.Command, args []string) {
