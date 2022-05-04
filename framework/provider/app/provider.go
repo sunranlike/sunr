@@ -21,7 +21,7 @@ func (h *HadeAppProvider) Boot(container framework.Container) error {
 	return nil
 }
 
-// IsDefer 是否延迟初始化
+// IsDefer 是否延迟初始化。如果返回false就是在绑定的时候就实例化
 func (h *HadeAppProvider) IsDefer() bool {
 	return false
 }

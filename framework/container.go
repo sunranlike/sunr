@@ -50,15 +50,17 @@ type HadeContainer struct {
 //加锁--->取参数的ServiceProvider的name---->绑定到接受者的providersmap中
 func (hade *HadeContainer) Bind(provider ServiceProvider) error {
 	hade.lock.Lock() //加锁，并且是读写锁。
-	defer hade.lock.Unlock()
-
+	//defer hade.lock.RUnlock()
+	//这样下面的Boot不可重入锁
 	key := provider.Name() //获取服务名
 
 	hade.providers[key] = provider //name:provider存入map中
-
+	//这里直接解锁,不然Boot调用的MustMake不会取得锁
+	hade.lock.Unlock()
 	//如果不需要注册时实例化,这里就结束了
 
 	// 如果注册时就要实例化,这里开始进行实例化
+	//我们的框架服务的IsDefer都是false
 	if provider.IsDefer() == false { //不延迟实例化的话，那么立马实例化出来这个服务。
 		if err := provider.Boot(hade); err != nil { //这个服务Bind函数中有实例化的方法
 			return err
@@ -72,6 +74,7 @@ func (hade *HadeContainer) Bind(provider ServiceProvider) error {
 		}
 		hade.instances[key] = instance //存入实例化map
 	}
+
 	return nil
 }
 

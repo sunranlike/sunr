@@ -3,7 +3,7 @@
 #provider
 providerr文件干了什么：定义xxxProvider结构体，**实现ServiceProvider接口**
 + 定义xxxProvider结构体，并以他为基实现service provider接口的五个方法。
-+ 没了=。=
++ 我们这里是框架服务，所以IsDefer都是false，即在绑定的时候就初始化一个。
 
 #service
 service文件干什么：**服务真正的实现**
