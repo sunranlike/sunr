@@ -5,7 +5,7 @@ import (
 	"github.com/sunranlike/hade/app/http"
 	"github.com/sunranlike/hade/framework"
 	"github.com/sunranlike/hade/framework/provider/app"
-	"github.com/sunranlike/hade/framework/provider/distributed"
+	"github.com/sunranlike/hade/framework/provider/config"
 	"github.com/sunranlike/hade/framework/provider/env"
 	"github.com/sunranlike/hade/framework/provider/kernel"
 )
@@ -18,11 +18,14 @@ func main() {
 
 	//绑定框架级服务提供者 (业务级别服务不在这里绑定,在更下层的函数绑定): 目录结构服务 HadeAppProvider
 	//我们调用了Container接口的一个方法:Bind,将一个service provider和我们的容器做绑定.这个服务需要实现serviceProvider接口
-	container.Bind(&app.HadeAppProvider{})
-	container.Bind(&env.HadeEnvProvider{})
+
+	container.Bind(&app.HadeAppProvider{})       //appProvider
+	container.Bind(&env.HadeEnvProvider{})       //环境变量服务
+	container.Bind(&config.HadeConfigProvider{}) //配置读取服务
+
 	//先初始化engine实例才可以传入HadeKernelP结构体内,因为新建http可能会失败,所以要handle err
 	//之前并没有绑定这个本地分布式抢占系统，所以会提示 contract hade:distributed have not register
-	container.Bind(&distributed.LocalDistributedProvider{})
+	//container.Bind(&distributed.LocalDistributedProvider{})
 	if engine, err := http.NewHttpEngine(); err == nil {
 
 		//这里又绑定一个框架级别服务?why,其实就是对上面的那个gin.engige进行绑定,上面使用一个common ok 语法接收,如果初始化成功

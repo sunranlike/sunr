@@ -15,6 +15,7 @@ func NewHttpEngine() (*gin.Engine, error) {
 	r.Use(gin.Logger(), gin.Recovery()) //使用两个全局中间件.
 
 	// 业务绑定路由操作,绑定路由就是对一个uri绑定到handler,实际上不仅仅只是绑定
+	//5.6我们更改了动态路由
 	Routes(r)
 	// 返回绑定路由后的Web引擎
 	return r, nil
