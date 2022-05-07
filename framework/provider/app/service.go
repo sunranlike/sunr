@@ -80,7 +80,7 @@ func (app HadeApp) ProviderFolder() string {
 	if val, ok := app.configMap["provider_folder"]; ok {
 		return val
 	}
-	return filepath.Join(app.BaseFolder(), "provider")
+	return filepath.Join(app.BaseFolder(), "app", "provider")
 }
 
 // MiddlewareFolder 定义业务自己定义的中间件
@@ -139,4 +139,12 @@ func (app *HadeApp) LoadAppConfig(kv map[string]string) {
 	for key, val := range kv {
 		app.configMap[key] = val
 	}
+}
+
+// AppFolder 代表app目录
+func (app *HadeApp) AppFolder() string {
+	if val, ok := app.configMap["app_folder"]; ok {
+		return val
+	}
+	return filepath.Join(app.BaseFolder(), "app")
 }

@@ -4,13 +4,9 @@
 
 package gin
 
-
-
 //func (ctx *Context) BaseContext() context.Context {
 //	return ctx.Request.Context()
 //}
-
-
 
 // context 实现container的几个封装
 

@@ -2,7 +2,6 @@ package demo
 
 import (
 	demoService "github.com/sunranlike/hade/app/provider/demo"
-	"github.com/sunranlike/hade/framework/contract"
 	"github.com/sunranlike/hade/framework/gin"
 )
 
@@ -38,10 +37,7 @@ func NewDemoApi() *DemoApi { //返回一个DemoApi结构,这是个啥?
 func (api *DemoApi) Demo(c *gin.Context) {
 	//appService := c.MustMake(contract.AppKey).(contract.App)
 	//baseFolder := appService.BaseFolder()
-	configService := c.MustMake(contract.ConfigKey).(contract.Config)
-	password := configService.GetString("database.mysql.password")
-	// 打印出来
-	c.JSON(200, password)
+	c.JSON(200, "this is just a demo")
 
 }
 
