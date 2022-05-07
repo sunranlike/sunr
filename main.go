@@ -7,7 +7,10 @@ import (
 	"github.com/sunranlike/hade/framework/provider/app"
 	"github.com/sunranlike/hade/framework/provider/config"
 	"github.com/sunranlike/hade/framework/provider/env"
+	"github.com/sunranlike/hade/framework/provider/id"
 	"github.com/sunranlike/hade/framework/provider/kernel"
+	"github.com/sunranlike/hade/framework/provider/log"
+	"github.com/sunranlike/hade/framework/provider/trace"
 )
 
 func main() {
@@ -22,7 +25,10 @@ func main() {
 	container.Bind(&app.HadeAppProvider{})       //appProvider
 	container.Bind(&env.HadeEnvProvider{})       //环境变量服务
 	container.Bind(&config.HadeConfigProvider{}) //配置读取服务
-
+	container.Bind(&config.HadeConfigProvider{})
+	container.Bind(&id.HadeIDProvider{})
+	container.Bind(&trace.HadeTraceProvider{})
+	container.Bind(&log.HadeLogServiceProvider{})
 	//先初始化engine实例才可以传入HadeKernelP结构体内,因为新建http可能会失败,所以要handle err
 	//之前并没有绑定这个本地分布式抢占系统，所以会提示 contract hade:distributed have not register
 	//container.Bind(&distributed.LocalDistributedProvider{})
