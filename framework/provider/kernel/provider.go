@@ -1,4 +1,3 @@
-
 package kernel
 
 import (
@@ -11,8 +10,6 @@ import (
 type HadeKernelProvider struct {
 	HttpEngine *gin.Engine
 }
-
-
 
 //实现service provider接口
 
@@ -44,4 +41,3 @@ func (provider *HadeKernelProvider) Params(c framework.Container) []interface{} 
 func (provider *HadeKernelProvider) Name() string {
 	return contract.KernelKey
 }
-
