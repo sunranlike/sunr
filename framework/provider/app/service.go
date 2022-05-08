@@ -115,6 +115,14 @@ func (app HadeApp) TestFolder() string {
 	return filepath.Join(app.BaseFolder(), "test")
 }
 
+// AppFolder 代表app目录
+func (app *HadeApp) AppFolder() string {
+	if val, ok := app.configMap["app_folder"]; ok {
+		return val
+	}
+	return filepath.Join(app.BaseFolder(), "app")
+}
+
 // NewHadeApp 初始化HadeApp
 func NewHadeApp(params ...interface{}) (interface{}, error) {
 	if len(params) != 2 {

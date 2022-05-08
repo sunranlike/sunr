@@ -4,16 +4,25 @@ import "github.com/sunranlike/hade/framework/cobra"
 
 // AddKernelCommands will add all command/* to root command
 func AddKernelCommands(root *cobra.Command) {
-	//root.AddCommand(FrameworkDemoCommand)
-	root.AddCommand(initEnvCommand())
-
-	root.AddCommand(initCronCommand())
-
-	root.AddCommand(initBuildCommand())
-	root.AddCommand(initConfigCommand())
-	//
-	//// app
-	//传入框架级别服务:目录app服务,到rootcmd中
+	// app 命令
 	root.AddCommand(initAppCommand())
+	// env 命令
+	root.AddCommand(initEnvCommand())
+	// cron 命令
+	root.AddCommand(initCronCommand())
+	// config 命令
+	root.AddCommand(initConfigCommand())
+	// build 命令
+	root.AddCommand(initBuildCommand())
+	// go build
+	//root.AddCommand(goCommand)
+	// npm build
+	root.AddCommand(npmCommand)
+	// dev
+	root.AddCommand(initDevCommand())
+	// cmd
+	//root.AddCommand(initCmdCommand())
+	// provider
+	//root.AddCommand(initProviderCommand())
 
 }

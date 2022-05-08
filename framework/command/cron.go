@@ -201,7 +201,7 @@ var cronStopCommand = &cobra.Command{
 			if runtime.GOOS == "windows" {
 				command = exec.Command("taskkill.exe", "/f", "/pid", string(pid))
 			} else {
-				command = exec.Command("kill", string(pid))
+				command = exec.Command("kill", string(rune(pid)))
 			}
 			command.Start()
 			//if err := syscall.Kill(pid, syscall.SIGTERM); err != nil {

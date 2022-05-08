@@ -14,8 +14,13 @@ import (
 
 // AppCommand 是命令行参数第一级为 app 的命令，它没有实际功能，只是打印帮助文档
 
+//app启动地址
+var appAddress = ""
+
 // initAppCommand 初始化app命令和其子命令
 func initAppCommand() *cobra.Command {
+	//增加一个string字段:appAddress
+	appStartCommand.Flags().StringVar(&appAddress, "address", ":8888", "设置app启动的地址，默认为:8888")
 	appCommand.AddCommand(appStartCommand) //有一个父子关系,父亲是appCommand.子是appStartCommand
 	//对应的父命令式app,子命令是start
 	return appCommand
@@ -59,7 +64,8 @@ var appStartCommand = &cobra.Command{
 		// 创建一个Server服务,并将core传入
 		server := &http.Server{
 			Handler: core,
-			Addr:    ":8888",
+			//Addr:    ":8888",原本固定的是Addr
+			Addr: appAddress,
 		}
 
 		// 这个goroutine是启动服务的goroutine
