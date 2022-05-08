@@ -58,14 +58,14 @@ func (app HadeApp) HttpFolder() string {
 	if val, ok := app.configMap["http_folder"]; ok {
 		return val
 	}
-	return filepath.Join(app.BaseFolder(), "http")
+	return filepath.Join(app.BaseFolder(), "app", "http")
 }
 
 func (app HadeApp) ConsoleFolder() string {
 	if val, ok := app.configMap["console_folder"]; ok {
 		return val
 	}
-	return filepath.Join(app.BaseFolder(), "console")
+	return filepath.Join(app.BaseFolder(), "app", "console")
 }
 
 func (app HadeApp) StorageFolder() string {
