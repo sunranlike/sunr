@@ -83,7 +83,7 @@ var newCommand = &cobra.Command{
 			// 获取hade的版本
 			client := github.NewClient(nil)
 			prompt := &survey.Input{
-				Message: "请输入版本名称(参考 https://github.com/sunranlike/coredemo/releases，默认为最新版本)：",
+				Message: "请输入版本名称(参考 https://github.com/sunranlike/hade/releases，默认为最新版本)：",
 			}
 			err := survey.AskOne(prompt, &version)
 			if err != nil {
@@ -91,14 +91,14 @@ var newCommand = &cobra.Command{
 			}
 			if version != "" {
 				// 确认版本是否正确
-				release, _, err = client.Repositories.GetReleaseByTag(context.Background(), "sunranlike", "coredemo", version)
+				release, _, err = client.Repositories.GetReleaseByTag(context.Background(), "sunranlike", "hade", version)
 				if err != nil || release == nil {
-					fmt.Println("版本不存在，创建应用失败，请参考 https://github.com/sunranlike/coredemo/releases")
+					fmt.Println("版本不存在，创建应用失败，请参考 https://github.com/sunranlike/hade/releases")
 					return nil
 				}
 			}
 			if version == "" {
-				release, _, err = client.Repositories.GetLatestRelease(context.Background(), "sunranlike", "coredemo")
+				release, _, err = client.Repositories.GetLatestRelease(context.Background(), "sunranlike", "hade")
 				version = release.GetTagName()
 			}
 		}
@@ -132,7 +132,7 @@ var newCommand = &cobra.Command{
 		}
 		for _, fInfo := range fInfos {
 			// 找到解压后的文件夹
-			if fInfo.IsDir() && strings.Contains(fInfo.Name(), "sunranlike-coredemo-") {
+			if fInfo.IsDir() && strings.Contains(fInfo.Name(), "sunranlike-hade-") {
 				if err := os.Rename(filepath.Join(templateFolder, fInfo.Name()), folder); err != nil {
 					return err
 				}
