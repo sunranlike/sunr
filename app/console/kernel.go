@@ -1,6 +1,7 @@
 package console
 
 import (
+	"github.com/sunranlike/hade/app/console/command/demo"
 	"github.com/sunranlike/hade/framework"
 	"github.com/sunranlike/hade/framework/cobra"
 	"github.com/sunranlike/hade/framework/command"
@@ -46,6 +47,6 @@ func RunCommand(container framework.Container) error {
 // 绑定业务的命令
 func AddAppCommand(rootCmd *cobra.Command) {
 	//  demo 例子
-	//rootCmd.AddCommand(demo.InitFoo())
+	rootCmd.AddCommand(demo.FooCommand)
 	//rootCmd.AddDistributedCronCommand("foo_func_for_test", "* * * * * *", demo.FooCommand, 2*time.Second)
 }

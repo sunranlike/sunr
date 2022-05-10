@@ -6,6 +6,11 @@ func (engine *Engine) SetContainer(container framework.Container) {
 	engine.container = container
 }
 
+// GetContainer 从Engine中获取container
+func (engine *Engine) GetContainer() framework.Container {
+	return engine.container
+}
+
 // Bind engine实现container的绑定封装
 //？这是个什么逻辑？我们在实现它的时候在调用它？
 //其实engine没有实现Bind方法，他只是调用了container字段的Bind方法，

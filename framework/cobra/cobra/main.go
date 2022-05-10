@@ -14,9 +14,8 @@
 package main
 
 import (
+	"github.com/sunranlike/hade/framework/cobra/cobra/cmd"
 	"os"
-
-	"github.com/spf13/cobra/cobra/cmd"
 )
 
 func main() {

@@ -14,12 +14,11 @@
 package cmd
 
 import (
+	"github.com/sunranlike/hade/framework/cobra"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
-
-	"github.com/spf13/cobra"
 )
 
 var srcPaths []string

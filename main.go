@@ -32,7 +32,7 @@ func main() {
 	//先初始化engine实例才可以传入HadeKernelP结构体内,因为新建http可能会失败,所以要handle err
 	//之前并没有绑定这个本地分布式抢占系统，所以会提示 contract hade:distributed have not register
 	//container.Bind(&distributed.LocalDistributedProvider{})
-	if engine, err := http.NewHttpEngine(); err == nil {
+	if engine, err := http.NewHttpEngine(container); err == nil {
 
 		//这里又绑定一个框架级别服务?why,其实就是对上面的那个gin.engige进行绑定,上面使用一个common ok 语法接收,如果初始化成功
 		//将这个web服务engine绑定到我们的HadeKernelProvider结构体,这个结构体是一个实现了ServiceProvider的实例框架级服务,其中有一个gin.Engine字段

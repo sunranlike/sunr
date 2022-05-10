@@ -1,8 +1,8 @@
 swagger: true
 
 path:
-#  log_folder: "/home/jianfengye/hade/log/"
-#  runtime_folder: "/home/jianfengye/hade/runtime/"
+#  log_folder: "/home/siat/GolandProjects/sunr/log/"
+#  runtime_folder: "/home/siat/GolandProjects/sunr/runtime/"
 
 dev: # 调试模式
   port: 8070 # 调试模式最终监听的端口，默认为8070

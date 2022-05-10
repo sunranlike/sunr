@@ -2,11 +2,10 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/sunranlike/hade/framework/cobra"
+	"github.com/sunranlike/hade/framework/cobra/cobra/tpl"
 	"os"
 	"text/template"
-
-	"github.com/spf13/cobra"
-	"github.com/spf13/cobra/cobra/tpl"
 )
 
 // Project contains name, license and paths to projects.
