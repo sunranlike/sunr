@@ -8,17 +8,17 @@ import (
 
 type HadeConfigProvider struct{}
 
-// Register registe a new function for make a service instance
+// Register registe a new function for make a services instance
 func (provider *HadeConfigProvider) Register(c framework.Container) framework.NewInstance {
 	return NewHadeConfig
 }
 
-// Boot will called when the service instantiate
+// Boot will called when the services instantiate
 func (provider *HadeConfigProvider) Boot(c framework.Container) error {
 	return nil
 }
 
-// IsDefer define whether the service instantiate when first make or register
+// IsDefer define whether the services instantiate when first make or register
 func (provider *HadeConfigProvider) IsDefer() bool {
 	//
 	return false
@@ -35,7 +35,7 @@ func (provider *HadeConfigProvider) Params(c framework.Container) []interface{} 
 	return []interface{}{c, envFolder, envService.All()}
 }
 
-/// Name define the name for this service
+/// Name define the name for this services
 func (provider *HadeConfigProvider) Name() string {
 	return contract.ConfigKey
 }

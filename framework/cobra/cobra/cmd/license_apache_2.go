@@ -170,7 +170,7 @@ limitations under the License.`,
       with Licensor regarding such Contributions.
 
    6. Trademarks. This License does not grant permission to use the trade
-      names, trademarks, service marks, or product names of the Licensor,
+      names, trademarks, services marks, or product names of the Licensor,
       except as required for reasonable and customary use in describing the
       origin of the Work and reproducing the content of the NOTICE file.
 

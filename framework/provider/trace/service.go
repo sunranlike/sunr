@@ -142,10 +142,10 @@ func (t *HadeTraceService) ToMap(tc *contract.TraceContext) map[string]string {
 	return m
 }
 
-// func (t *HadeTraceService) SetTraceIDService(service contract.IDService) {
-// 	t.traceIDGenerator = service
-// }
+func (t *HadeTraceService) SetTraceIDService(service contract.IDService) {
+	t.traceIDGenerator = service
+}
 
-// func (t *HadeTraceService) SetSpanIDService(service contract.IDService) {
-// 	t.spanIDGenerator = service
+// func (t *HadeTraceService) SetSpanIDService(services contract.IDService) {
+// 	t.spanIDGenerator = services
 // }
