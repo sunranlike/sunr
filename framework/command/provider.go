@@ -139,12 +139,12 @@ var providerCreateCommand = &cobra.Command{
 		}
 		{
 			//  创建service.go
-			file := filepath.Join(pFolder, folder, "service.go")
+			file := filepath.Join(pFolder, folder, "services.go")
 			f, err := os.Create(file)
 			if err != nil {
 				return err
 			}
-			t := template.Must(template.New("service").Funcs(funcs).Parse(serviceTmp))
+			t := template.Must(template.New("services").Funcs(funcs).Parse(serviceTmp))
 			if err := t.Execute(f, name); err != nil {
 				return err
 			}

@@ -15,6 +15,7 @@ func GetExecDirectory() string {
 }
 
 // CheckProcessExist Will return true if the process with PID exists.
+//调用了os.FindProcess(pid)方法,查询是否存在pid对应的进程
 func CheckProcessExist(pid int) bool {
 	process, err := os.FindProcess(pid)
 	if err != nil {
