@@ -1,18 +1,18 @@
 package main
 
 import (
-	"github.com/sunranlike/hade/app/console"
-	"github.com/sunranlike/hade/app/http"
-	"github.com/sunranlike/hade/framework"
-	"github.com/sunranlike/hade/framework/provider/app"
-	"github.com/sunranlike/hade/framework/provider/config"
-	"github.com/sunranlike/hade/framework/provider/env"
-	"github.com/sunranlike/hade/framework/provider/id"
-	"github.com/sunranlike/hade/framework/provider/kernel"
-	"github.com/sunranlike/hade/framework/provider/log"
-	"github.com/sunranlike/hade/framework/provider/orm"
-	"github.com/sunranlike/hade/framework/provider/redis"
-	"github.com/sunranlike/hade/framework/provider/trace"
+  "github.com/sunranlike/sunr/app/console"
+  "github.com/sunranlike/sunr/app/http"
+  "github.com/sunranlike/sunr/framework"
+  "github.com/sunranlike/sunr/framework/provider/app"
+  "github.com/sunranlike/sunr/framework/provider/config"
+  "github.com/sunranlike/sunr/framework/provider/env"
+  "github.com/sunranlike/sunr/framework/provider/id"
+  "github.com/sunranlike/sunr/framework/provider/kernel"
+  "github.com/sunranlike/sunr/framework/provider/log"
+  "github.com/sunranlike/sunr/framework/provider/orm"
+  "github.com/sunranlike/sunr/framework/provider/redis"
+  "github.com/sunranlike/sunr/framework/provider/trace"
 )
 
 func main() {

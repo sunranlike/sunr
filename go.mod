@@ -1,4 +1,4 @@
-module github.com/sunranlike/hade
+module github.com/sunranlike/sunr
 
 go 1.16
 
