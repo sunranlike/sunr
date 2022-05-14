@@ -28,4 +28,6 @@ type App interface {
 	AppID() string
 	// LoadAppConfig 加载新的AppConfig，key为对应的函数转为小写下划线，比如ConfigFolder => config_folder
 	LoadAppConfig(kv map[string]string)
+
+	DeployFolder() string
 }
