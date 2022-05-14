@@ -1,6 +1,6 @@
 package gin
 
-import "github.com/sunranlike/hade/framework"
+import "github.com/sunranlike/sunr/framework"
 
 func (engine *Engine) SetContainer(container framework.Container) {
 	engine.container = container

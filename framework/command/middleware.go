@@ -6,8 +6,8 @@ import (
 	"github.com/AlecAivazis/survey/v2"
 	"gopkg.in/src-d/go-git.v4"
 
-	"github.com/sunranlike/hade/framework/cobra"
-	"github.com/sunranlike/hade/framework/contract"
+	"github.com/sunranlike/sunr/framework/cobra"
+	"github.com/sunranlike/sunr/framework/contract"
 	"io/ioutil"
 	"os"
 	"path"

@@ -1,8 +1,8 @@
 package app
 
 import (
-	"github.com/sunranlike/hade/framework"
-	"github.com/sunranlike/hade/framework/contract"
+	"github.com/sunranlike/sunr/framework"
+	"github.com/sunranlike/sunr/framework/contract"
 )
 
 // HadeAppProvider 提供App的具体实现方法

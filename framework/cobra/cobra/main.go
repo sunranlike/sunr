@@ -14,7 +14,7 @@
 package main
 
 import (
-	"github.com/sunranlike/hade/framework/cobra/cobra/cmd"
+	"github.com/sunranlike/sunr/framework/cobra/cobra/cmd"
 	"os"
 )
 

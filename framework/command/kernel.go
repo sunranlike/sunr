@@ -1,6 +1,6 @@
 package command
 
-import "github.com/sunranlike/hade/framework/cobra"
+import "github.com/sunranlike/sunr/framework/cobra"
 
 // AddKernelCommands will add all command/* to root command
 func AddKernelCommands(root *cobra.Command) {

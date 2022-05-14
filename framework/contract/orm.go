@@ -2,7 +2,7 @@ package contract
 
 import (
 	"github.com/go-sql-driver/mysql"
-	"github.com/sunranlike/hade/framework"
+	"github.com/sunranlike/sunr/framework"
 	"gorm.io/gorm"
 
 	"net"

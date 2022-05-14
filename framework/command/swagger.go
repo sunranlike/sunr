@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/swaggo/swag/gen"
 
-	"github.com/sunranlike/hade/framework/cobra"
-	"github.com/sunranlike/hade/framework/contract"
+	"github.com/sunranlike/sunr/framework/cobra"
+	"github.com/sunranlike/sunr/framework/contract"
 
 	"path/filepath"
 )

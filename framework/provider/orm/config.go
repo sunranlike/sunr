@@ -1,8 +1,8 @@
 package orm
 
 import (
-	"github.com/sunranlike/hade/framework"
-	"github.com/sunranlike/hade/framework/contract"
+	"github.com/sunranlike/sunr/framework"
+	"github.com/sunranlike/sunr/framework/contract"
 )
 
 //这个文件是干嘛的？其实就是思考了Gorm的Option结构，我们也设置一个DBOption

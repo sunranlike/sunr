@@ -1,6 +1,6 @@
 package test4New
 
-import "github.com/sunranlike/hade/framework"
+import "github.com/sunranlike/sunr/framework"
 
 type Test4NewService struct {
 	container framework.Container

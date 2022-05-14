@@ -11,9 +11,9 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/sunranlike/hade/framework/cobra"
-	"github.com/sunranlike/hade/framework/contract"
-	"github.com/sunranlike/hade/framework/util"
+	"github.com/sunranlike/sunr/framework/cobra"
+	"github.com/sunranlike/sunr/framework/contract"
+	"github.com/sunranlike/sunr/framework/util"
 
 	"github.com/erikdubbelboer/gspt"
 )

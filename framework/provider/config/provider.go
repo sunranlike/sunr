@@ -1,8 +1,8 @@
 package config
 
 import (
-	"github.com/sunranlike/hade/framework"
-	"github.com/sunranlike/hade/framework/contract"
+	"github.com/sunranlike/sunr/framework"
+	"github.com/sunranlike/sunr/framework/contract"
 	"path/filepath"
 )
 

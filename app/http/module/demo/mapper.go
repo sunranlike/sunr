@@ -1,7 +1,7 @@
 package demo
 
 import (
-	demoService "github.com/sunranlike/hade/app/provider/demo"
+	demoService "github.com/sunranlike/sunr/app/provider/demo"
 )
 
 func UserModelsToUserDTOs(models []UserModel) []UserDTO {

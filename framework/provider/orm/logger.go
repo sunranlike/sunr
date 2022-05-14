@@ -2,7 +2,7 @@ package orm
 
 import (
 	"context"
-	"github.com/sunranlike/hade/framework/contract"
+	"github.com/sunranlike/sunr/framework/contract"
 	"gorm.io/gorm/logger"
 	"time"
 )

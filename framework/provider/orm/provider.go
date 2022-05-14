@@ -1,8 +1,8 @@
 package orm
 
 import (
-	"github.com/sunranlike/hade/framework"
-	"github.com/sunranlike/hade/framework/contract"
+	"github.com/sunranlike/sunr/framework"
+	"github.com/sunranlike/sunr/framework/contract"
 )
 
 // GormProvider 提供App的具体实现方法

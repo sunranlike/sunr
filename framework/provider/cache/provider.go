@@ -3,9 +3,9 @@ package cache
 import (
 	"strings"
 
-	"github.com/sunranlike/hade/framework"
-	"github.com/sunranlike/hade/framework/contract"
-	"github.com/sunranlike/hade/framework/provider/cache/services"
+	"github.com/sunranlike/sunr/framework"
+	"github.com/sunranlike/sunr/framework/contract"
+	"github.com/sunranlike/sunr/framework/provider/cache/services"
 )
 
 // HadeCacheProvider 服务提供者

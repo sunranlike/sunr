@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/sunranlike/hade/framework/contract"
+	"github.com/sunranlike/sunr/framework/contract"
 
 	"github.com/pkg/errors"
 )

@@ -6,9 +6,9 @@ import (
 	pkgLog "log"
 	"time"
 
-	"github.com/sunranlike/hade/framework"
-	"github.com/sunranlike/hade/framework/contract"
-	"github.com/sunranlike/hade/framework/provider/log/formatter"
+	"github.com/sunranlike/sunr/framework"
+	"github.com/sunranlike/sunr/framework/contract"
+	"github.com/sunranlike/sunr/framework/provider/log/formatter"
 )
 
 // HadeLog 的通用实例,会在其他结构中进行type embdeing。

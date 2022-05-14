@@ -1,9 +1,9 @@
 package kernel
 
 import (
-	"github.com/sunranlike/hade/framework"
-	"github.com/sunranlike/hade/framework/contract"
-	"github.com/sunranlike/hade/framework/gin"
+	"github.com/sunranlike/sunr/framework"
+	"github.com/sunranlike/sunr/framework/contract"
+	"github.com/sunranlike/sunr/framework/gin"
 )
 
 // HadeKernelProvider 提供web引擎

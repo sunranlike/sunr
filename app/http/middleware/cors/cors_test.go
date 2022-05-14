@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/sunranlike/hade/framework/gin"
+	"github.com/sunranlike/sunr/framework/gin"
 )
 
 func newTestRouter(config Config) *gin.Engine {

@@ -2,8 +2,8 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/sunranlike/hade/framework/cobra"
-	"github.com/sunranlike/hade/framework/cobra/cobra/tpl"
+	"github.com/sunranlike/sunr/framework/cobra"
+	"github.com/sunranlike/sunr/framework/cobra/cobra/tpl"
 	"os"
 	"text/template"
 )

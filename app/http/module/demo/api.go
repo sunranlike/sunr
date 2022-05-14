@@ -1,8 +1,8 @@
 package demo
 
 import (
-	demoService "github.com/sunranlike/hade/app/provider/demo"
-	"github.com/sunranlike/hade/framework/gin"
+	demoService "github.com/sunranlike/sunr/app/provider/demo"
+	"github.com/sunranlike/sunr/framework/gin"
 )
 
 type DemoApi struct {

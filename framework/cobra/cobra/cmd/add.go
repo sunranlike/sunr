@@ -15,7 +15,7 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/sunranlike/hade/framework/cobra"
+	"github.com/sunranlike/sunr/framework/cobra"
 	"os"
 	"unicode"
 )

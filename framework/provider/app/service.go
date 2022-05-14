@@ -4,8 +4,8 @@ import (
 	"flag"
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
-	"github.com/sunranlike/hade/framework"
-	"github.com/sunranlike/hade/framework/util"
+	"github.com/sunranlike/sunr/framework"
+	"github.com/sunranlike/sunr/framework/util"
 	"path/filepath"
 )
 

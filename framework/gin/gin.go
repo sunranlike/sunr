@@ -6,7 +6,7 @@ package gin
 
 import (
 	"fmt"
-	"github.com/sunranlike/hade/framework"
+	"github.com/sunranlike/sunr/framework"
 	"html/template"
 	"net"
 	"net/http"
@@ -15,8 +15,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/sunranlike/hade/framework/gin/internal/bytesconv"
-	"github.com/sunranlike/hade/framework/gin/render"
+	"github.com/sunranlike/sunr/framework/gin/internal/bytesconv"
+	"github.com/sunranlike/sunr/framework/gin/render"
 )
 
 const defaultMultipartMemory = 32 << 20 // 32 MB

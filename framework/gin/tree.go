@@ -11,7 +11,7 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"github.com/sunranlike/hade/framework/gin/internal/bytesconv"
+	"github.com/sunranlike/sunr/framework/gin/internal/bytesconv"
 )
 
 var (

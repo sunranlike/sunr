@@ -1,7 +1,7 @@
 package kernel
 
 import (
-	"github.com/sunranlike/hade/framework/gin"
+	"github.com/sunranlike/sunr/framework/gin"
 	"net/http"
 )
 

@@ -2,7 +2,7 @@ package contract
 
 import (
 	"fmt"
-	"github.com/sunranlike/hade/framework"
+	"github.com/sunranlike/sunr/framework"
 	"golang.org/x/crypto/ssh"
 )
 

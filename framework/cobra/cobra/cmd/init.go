@@ -16,7 +16,7 @@ package cmd
 import (
 	"fmt"
 	"github.com/spf13/viper"
-	"github.com/sunranlike/hade/framework/cobra"
+	"github.com/sunranlike/sunr/framework/cobra"
 	"os"
 	"path"
 )

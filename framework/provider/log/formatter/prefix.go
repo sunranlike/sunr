@@ -1,6 +1,6 @@
 package formatter
 
-import "github.com/sunranlike/hade/framework/contract"
+import "github.com/sunranlike/sunr/framework/contract"
 
 func Prefix(level contract.LogLevel) string {
 	prefix := ""

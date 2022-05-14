@@ -2,13 +2,13 @@ package services
 
 import (
 	"fmt"
-	"github.com/sunranlike/hade/framework/util"
+	"github.com/sunranlike/sunr/framework/util"
 	"os"
 	"path/filepath"
 	"time"
 
-	"github.com/sunranlike/hade/framework"
-	"github.com/sunranlike/hade/framework/contract"
+	"github.com/sunranlike/sunr/framework"
+	"github.com/sunranlike/sunr/framework/contract"
 
 	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
 	"github.com/pkg/errors"

@@ -1,9 +1,9 @@
 package demo
 
 import (
-	"github.com/sunranlike/hade/framework/contract"
-	"github.com/sunranlike/hade/framework/gin"
-	"github.com/sunranlike/hade/framework/provider/redis"
+	"github.com/sunranlike/sunr/framework/contract"
+	"github.com/sunranlike/sunr/framework/gin"
+	"github.com/sunranlike/sunr/framework/provider/redis"
 	"time"
 )
 

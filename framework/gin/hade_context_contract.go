@@ -1,6 +1,6 @@
 package gin
 
-import "github.com/sunranlike/hade/framework/contract"
+import "github.com/sunranlike/sunr/framework/contract"
 
 // MustMakeApp 从容器中获取App服务
 func (c *Context) MustMakeApp() contract.App {

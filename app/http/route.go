@@ -1,12 +1,12 @@
 package http
 
 import (
-	"github.com/sunranlike/hade/app/http/module/demo"
-	"github.com/sunranlike/hade/framework/contract"
-	"github.com/sunranlike/hade/framework/gin"
-	ginSwagger "github.com/sunranlike/hade/framework/middleware/gin-swagger"
-	"github.com/sunranlike/hade/framework/middleware/gin-swagger/swaggerFiles"
-	"github.com/sunranlike/hade/framework/middleware/static"
+	"github.com/sunranlike/sunr/app/http/module/demo"
+	"github.com/sunranlike/sunr/framework/contract"
+	"github.com/sunranlike/sunr/framework/gin"
+	ginSwagger "github.com/sunranlike/sunr/framework/middleware/gin-swagger"
+	"github.com/sunranlike/sunr/framework/middleware/gin-swagger/swaggerFiles"
+	"github.com/sunranlike/sunr/framework/middleware/static"
 )
 
 // Routes 绑定业务层路由

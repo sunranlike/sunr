@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"github.com/sunranlike/hade/framework/gin"
+	"github.com/sunranlike/sunr/framework/gin"
 )
 
 // Recovery :recovery机制，将协程中的函数异常进行捕获

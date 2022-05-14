@@ -1,8 +1,8 @@
 package http
 
 import (
-	"github.com/sunranlike/hade/framework"
-	"github.com/sunranlike/hade/framework/gin"
+	"github.com/sunranlike/sunr/framework"
+	"github.com/sunranlike/sunr/framework/gin"
 )
 
 // NewHttpEngine 创建了一个绑定了路由的Web引擎

@@ -1,7 +1,7 @@
 package test4New
 
 import (
-	"github.com/sunranlike/hade/framework"
+	"github.com/sunranlike/sunr/framework"
 )
 
 type Test4NewProvider struct {

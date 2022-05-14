@@ -2,7 +2,7 @@ package cobra
 
 import (
 	"github.com/robfig/cron/v3"
-	"github.com/sunranlike/hade/framework/contract"
+	"github.com/sunranlike/sunr/framework/contract"
 	"log"
 	"time"
 )

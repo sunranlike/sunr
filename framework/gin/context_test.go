@@ -24,7 +24,7 @@ import (
 	"github.com/gin-contrib/sse"
 	"github.com/golang/protobuf/proto"
 	"github.com/stretchr/testify/assert"
-	"github.com/sunranlike/hade/framework/gin/binding"
+	"github.com/sunranlike/sunr/framework/gin/binding"
 
 	testdata "github.com/gin-gonic/gin/testdata/protoexample"
 )

@@ -14,7 +14,7 @@
 package cmd
 
 import (
-	"github.com/sunranlike/hade/framework/cobra"
+	"github.com/sunranlike/sunr/framework/cobra"
 	"os"
 	"os/exec"
 	"path/filepath"

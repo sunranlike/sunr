@@ -1,7 +1,7 @@
 package ginSwagger
 
 import (
-	"github.com/sunranlike/hade/framework/gin"
+	"github.com/sunranlike/sunr/framework/gin"
 	"html/template"
 	"os"
 	"regexp"

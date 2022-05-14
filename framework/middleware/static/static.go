@@ -6,7 +6,7 @@ import (
 	"path"
 	"strings"
 
-	"github.com/sunranlike/hade/framework/gin"
+	"github.com/sunranlike/sunr/framework/gin"
 )
 
 const INDEX = "index.html"

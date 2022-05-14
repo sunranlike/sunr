@@ -3,8 +3,8 @@ package redis
 import (
 	"context"
 	"github.com/go-redis/redis/v8"
-	"github.com/sunranlike/hade/framework"
-	"github.com/sunranlike/hade/framework/contract"
+	"github.com/sunranlike/sunr/framework"
+	"github.com/sunranlike/sunr/framework/contract"
 	"strconv"
 	"time"
 )

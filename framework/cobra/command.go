@@ -20,7 +20,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/robfig/cron/v3"
-	"github.com/sunranlike/hade/framework"
+	"github.com/sunranlike/sunr/framework"
 
 	"io"
 	"os"

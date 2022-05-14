@@ -1,13 +1,13 @@
 package log
 
 import (
-	"github.com/sunranlike/hade/framework/provider/log/formatter"
-	services "github.com/sunranlike/hade/framework/provider/log/service"
+	"github.com/sunranlike/sunr/framework/provider/log/formatter"
+	services "github.com/sunranlike/sunr/framework/provider/log/service"
 	"io"
 	"strings"
 
-	"github.com/sunranlike/hade/framework"
-	"github.com/sunranlike/hade/framework/contract"
+	"github.com/sunranlike/sunr/framework"
+	"github.com/sunranlike/sunr/framework/contract"
 )
 
 // HadeLogServiceProvider 服务提供者

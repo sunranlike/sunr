@@ -1,6 +1,6 @@
 package demo
 
-import "github.com/sunranlike/hade/framework"
+import "github.com/sunranlike/sunr/framework"
 
 type Service struct {
 	container framework.Container

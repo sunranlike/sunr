@@ -1,10 +1,10 @@
 package console
 
 import (
-	"github.com/sunranlike/hade/app/console/command/demo"
-	"github.com/sunranlike/hade/framework"
-	"github.com/sunranlike/hade/framework/cobra"
-	"github.com/sunranlike/hade/framework/command"
+  "github.com/sunranlike/sunr/app/console/command/demo"
+  "github.com/sunranlike/sunr/framework"
+  "github.com/sunranlike/sunr/framework/cobra"
+  "github.com/sunranlike/sunr/framework/command"
 )
 
 // RunCommand  初始化根Command并运行

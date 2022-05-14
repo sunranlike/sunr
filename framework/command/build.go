@@ -5,7 +5,7 @@ import (
 	"log"
 	"os/exec"
 
-	"github.com/sunranlike/hade/framework/cobra"
+	"github.com/sunranlike/sunr/framework/cobra"
 )
 
 // build相关的命令

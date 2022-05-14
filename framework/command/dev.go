@@ -3,7 +3,7 @@ package command
 import (
 	"fmt"
 	"github.com/pkg/errors"
-	"github.com/sunranlike/hade/framework"
+	"github.com/sunranlike/sunr/framework"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
@@ -13,9 +13,9 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/sunranlike/hade/framework/cobra"
-	"github.com/sunranlike/hade/framework/contract"
-	"github.com/sunranlike/hade/framework/util"
+	"github.com/sunranlike/sunr/framework/cobra"
+	"github.com/sunranlike/sunr/framework/contract"
+	"github.com/sunranlike/sunr/framework/util"
 
 	"github.com/fsnotify/fsnotify"
 )

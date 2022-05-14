@@ -24,5 +24,5 @@
 package http
 
 import (
-	_ "github.com/sunranlike/hade/app/http/swagger"
+	_ "github.com/sunranlike/sunr/app/http/swagger"
 )

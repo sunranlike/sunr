@@ -7,7 +7,7 @@ package gin
 import (
 	"errors"
 	"fmt"
-	"github.com/sunranlike/hade/framework"
+	"github.com/sunranlike/sunr/framework"
 	"io"
 	"io/ioutil"
 	"math"
@@ -21,8 +21,8 @@ import (
 	"time"
 
 	"github.com/gin-contrib/sse"
-	"github.com/sunranlike/hade/framework/gin/binding"
-	"github.com/sunranlike/hade/framework/gin/render"
+	"github.com/sunranlike/sunr/framework/gin/binding"
+	"github.com/sunranlike/sunr/framework/gin/render"
 )
 
 // Content-Type MIME of the most common data formats.

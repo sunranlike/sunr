@@ -2,9 +2,9 @@ package demo
 
 import (
 	"database/sql"
-	"github.com/sunranlike/hade/framework/contract"
-	"github.com/sunranlike/hade/framework/gin"
-	"github.com/sunranlike/hade/framework/provider/orm"
+	"github.com/sunranlike/sunr/framework/contract"
+	"github.com/sunranlike/sunr/framework/gin"
+	"github.com/sunranlike/sunr/framework/provider/orm"
 	"time"
 )
 

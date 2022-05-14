@@ -4,7 +4,7 @@ import (
 	"bufio"
 	"bytes"
 	"errors"
-	"github.com/sunranlike/hade/framework/contract"
+	"github.com/sunranlike/sunr/framework/contract"
 	"io"
 	"os"
 	"path"

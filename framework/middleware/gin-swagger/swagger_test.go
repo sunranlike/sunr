@@ -2,8 +2,8 @@ package ginSwagger
 
 import (
 	"github.com/stretchr/testify/assert"
-	"github.com/sunranlike/hade/framework/gin"
-	"github.com/sunranlike/hade/framework/middleware/gin-swagger/swaggerFiles"
+	"github.com/sunranlike/sunr/framework/gin"
+	"github.com/sunranlike/sunr/framework/middleware/gin-swagger/swaggerFiles"
 	"net/http/httptest"
 	"os"
 	"testing"

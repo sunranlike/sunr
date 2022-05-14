@@ -3,7 +3,7 @@ package contract
 import (
 	"fmt"
 	"github.com/go-redis/redis/v8"
-	"github.com/sunranlike/hade/framework"
+	"github.com/sunranlike/sunr/framework"
 )
 
 const RedisKey = "hade:redis"

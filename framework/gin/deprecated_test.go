@@ -11,7 +11,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/sunranlike/hade/framework/gin/binding"
+	"github.com/sunranlike/sunr/framework/gin/binding"
 )
 
 func TestBindWith(t *testing.T) {

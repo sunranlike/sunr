@@ -2,7 +2,7 @@ package contract
 
 import (
 	"context"
-	"github.com/sunranlike/hade/framework"
+	"github.com/sunranlike/sunr/framework"
 	"time"
 )
 

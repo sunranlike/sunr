@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/sunranlike/hade/framework/contract"
+	"github.com/sunranlike/sunr/framework/contract"
 )
 
 // TextFormatter 表示文本格式输出

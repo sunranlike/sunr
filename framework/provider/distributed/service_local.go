@@ -2,8 +2,8 @@ package distributed
 
 import (
 	"errors"
-	"github.com/sunranlike/hade/framework"
-	"github.com/sunranlike/hade/framework/contract"
+	"github.com/sunranlike/sunr/framework"
+	"github.com/sunranlike/sunr/framework/contract"
 
 	"io/ioutil"
 	"os"

@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/sunranlike/hade/framework/gin"
+	"github.com/sunranlike/sunr/framework/gin"
 )
 
 // Config represents all available options for the middleware.

@@ -3,8 +3,8 @@ package services
 import (
 	"os"
 
-	"github.com/sunranlike/hade/framework"
-	"github.com/sunranlike/hade/framework/contract"
+	"github.com/sunranlike/sunr/framework"
+	"github.com/sunranlike/sunr/framework/contract"
 )
 
 // HadeConsoleLog 代表控制台输出

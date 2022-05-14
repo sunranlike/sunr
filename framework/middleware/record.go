@@ -1,8 +1,8 @@
 package middleware
 
 import (
-	_ "github.com/sunranlike/hade/framework"
-	"github.com/sunranlike/hade/framework/gin"
+	_ "github.com/sunranlike/sunr/framework"
+	"github.com/sunranlike/sunr/framework/gin"
 	"log"
 	"time"
 )

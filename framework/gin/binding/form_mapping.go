@@ -12,8 +12,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/sunranlike/hade/framework/gin/internal/bytesconv"
-	"github.com/sunranlike/hade/framework/gin/internal/json"
+	"github.com/sunranlike/sunr/framework/gin/internal/bytesconv"
+	"github.com/sunranlike/sunr/framework/gin/internal/json"
 )
 
 var errUnknownType = errors.New("unknown type")

@@ -2,10 +2,10 @@ package command
 
 import (
 	"fmt"
-	"github.com/sunranlike/hade/framework/util"
+	"github.com/sunranlike/sunr/framework/util"
 
-	"github.com/sunranlike/hade/framework/cobra"
-	"github.com/sunranlike/hade/framework/contract"
+	"github.com/sunranlike/sunr/framework/cobra"
+	"github.com/sunranlike/sunr/framework/contract"
 )
 
 // initEnvCommand 获取env相关的命令
