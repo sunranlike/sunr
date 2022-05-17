@@ -14,7 +14,7 @@ import (
 	"text/template"
 )
 
-func initCmdCommnad() *cobra.Command {
+func initCmdCommand() *cobra.Command {
 	cmdCommand.AddCommand(cmdListCommand)
 	cmdCommand.AddCommand(cmdCreateCommand)
 	return cmdCommand

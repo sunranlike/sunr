@@ -14,7 +14,7 @@ import (
 	"path/filepath"
 )
 
-func iinitMiddlewareCommand() *cobra.Command {
+func initMiddlewareCommand() *cobra.Command {
 	middlewareCommand.AddCommand(middlewareMigrateCommand)
 	return middlewareCommand
 }

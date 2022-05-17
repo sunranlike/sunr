@@ -36,8 +36,14 @@ var appAddress = ""
 func initAppCommand() *cobra.Command {
 	//首先调用Flags()方法,使其成为一个FlagSet,然后在调用spf13的另一个库:pflag
 	//pflag的BoolVarP给这个命令添加了一个flag
+	//pflag也是一个好库，他添加一个参数，和参数配合。
+	//BOOLVarP的P就是会多一个shorthand
 	appStartCommand.Flags().BoolVarP(&appDaemon, "daemon", "d", false, "start app daemon")
 	appStartCommand.Flags().StringVar(&appAddress, "address", "", "设置app启动的地址，默认为:8888")
+	//appStartCommand是一个cobnraCommand结构体，调用它的Flags方法就可以成为一个FlagSet（FlagSet是Pflag的一个）
+	//这个FlagSet可以使用pflag的一些方法，比如我们这里使用BoolVarP，bool代表是一个布尔值flag，var代表绑定变量
+	//函数名带Var说明是将标志的值绑定到变量，否则是将标志的值存储在指针中。
+	//函数名带P说明支持短选项，否则不支持短选项。
 
 	appCommand.AddCommand(appRestartCommand)
 	appCommand.AddCommand(appStateCommand)
